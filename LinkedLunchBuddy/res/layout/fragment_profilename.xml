@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="20px"
+    android:orientation="vertical" >
+
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/lastNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/firstNameField"
+        android:layout_below="@+id/firstNameField"
+        android:layout_marginTop="31dp"
+        android:paddingLeft="8dp"
+        android:text="Last Name" />
+
+    <EditText
+        android:id="@+id/lastNameField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/lastNameLabel"
+        android:layout_below="@+id/lastNameLabel"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/saveNameButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="88dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/cancelNameButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="40dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Cancel" />
+
+    <EditText
+        android:id="@+id/firstNameField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstNameLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="First Name"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/firstNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        android:paddingLeft="8dp"
+        android:text="First Name" />
+
+</RelativeLayout>
+</LinearLayout>

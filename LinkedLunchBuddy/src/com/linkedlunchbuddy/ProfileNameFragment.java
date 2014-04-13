@@ -1,0 +1,96 @@
+package com.linkedlunchbuddy;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class ProfileNameFragment extends DialogFragment {
+	
+	private DataHandler dataHandler;
+	private EditText firstName;
+	private EditText lastName;
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_profilename, container, false);
+		
+		firstName = (EditText) rootView.findViewById(R.id.firstNameField);
+		lastName = (EditText) rootView.findViewById(R.id.lastNameField);
+		// Set text to be core data
+		dataHandler = new DataHandler(getActivity().getBaseContext());
+		dataHandler.open();
+		Cursor cursor = dataHandler.allUsers();
+		cursor.moveToFirst();
+		firstName.setText(cursor.getString(2), TextView.BufferType.EDITABLE);
+		lastName.setText(cursor.getString(3), TextView.BufferType.EDITABLE);
+		cursor.close();
+		dataHandler.close();
+		Button saveButton = (Button) rootView.findViewById(R.id.saveNameButton);
+		saveButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				// Alert dialog
+				new AlertDialog.Builder(getActivity())
+			    .setTitle("Update name")
+			    .setMessage("Are you sure you want to change your name?")
+			    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // continue with update
+						dataHandler = new DataHandler(getActivity().getBaseContext());
+						dataHandler.open();
+						dataHandler.changeName(firstName.getText().toString(), 
+								lastName.getText().toString());
+						dataHandler.close();
+						FragmentManager fragmentManager = getFragmentManager();
+						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+						fragmentTransaction.replace(R.id.frame_container, new ProfileFragment(), "Profile Name");
+						fragmentTransaction.commit();
+			        }
+			     })
+			    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // do nothing
+			        }
+			     })
+			    .setIcon(android.R.drawable.ic_dialog_alert)
+			     .show();
+						
+			}
+		});
+
+		Button cancelButton = (Button) rootView.findViewById(R.id.cancelNameButton);
+		cancelButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FragmentManager fragmentManager = getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction.replace(R.id.frame_container, new ProfileFragment(), "Profile Name");
+				fragmentTransaction.commit();
+			}
+		});
+
+		return rootView;
+	}
+/*
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		EditText firstName = (EditText) getActivity().findViewById(R.id.firstNameField);
+		EditText lastName = (EditText) getActivity().findViewById(R.id.lastNameField);
+
+		firstName.setText("First name");
+	}
+*/
+}
