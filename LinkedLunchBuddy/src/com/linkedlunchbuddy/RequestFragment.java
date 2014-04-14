@@ -16,16 +16,24 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
-import com.linkedlunchbuddy.messageEndpoint.MessageEndpoint;
+import com.linkedlunchbuddy.requestendpoint.Requestendpoint;
+import com.linkedlunchbuddy.requestendpoint.model.Request;
 import com.linkedlunchbuddy.userendpoint.Userendpoint;
 import com.linkedlunchbuddy.userendpoint.model.User;
 
 public class RequestFragment extends Fragment {
+	
+	private DataHandler dataHandler = new DataHandler(getActivity().getBaseContext());
+	private String userEmail = "NAH";
+
+	// TODO: make singletons
+	private Requestendpoint requestEndpoint;
+	private Userendpoint userEndpoint;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		View rootView = inflater.inflate(R.layout.fragment_request, container,
 				false);
 		Button sendButton = (Button) rootView.findViewById(R.id.sendButton);
@@ -34,33 +42,114 @@ public class RequestFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// Execute the endpoints task
-//				new EndpointsTask1().execute(getActivity()
-//						.getApplicationContext());
-				
-				new EndpointsTask2().execute(getActivity()
+				//TODO: User parameter needs to come from core data
+				new getRequestFromUserTask(new User()).execute(getActivity()
 						.getApplicationContext());
 
 			}
 		});
 
+		// Instantiate request endpoints and user endpoints
+		Requestendpoint.Builder requestEndpointBuilder = new Requestendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		this.requestEndpoint = CloudEndpointUtils.updateBuilder(
+				requestEndpointBuilder).build();
+
+		Userendpoint.Builder userEndpointBuilder = new Userendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		this.userEndpoint = CloudEndpointUtils.updateBuilder(
+				userEndpointBuilder).build();
+
 		return rootView;
 	}
 
-	// CREATE A USER WITH THE USERENDPOINT BUILDER
-	public class EndpointsTask1 extends AsyncTask<Context, Integer, Long> {
+	/**
+	 * RETRIEVE A USER WITH THE USERENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param User
+	 *            Edu Email
+	 * @return User Object
+	 */
+	public class getUserTask extends AsyncTask<Context, Void, User> {
+
+		private String eduEmail;
+
+		public getUserTask(String userEmail) {
+
+			this.eduEmail = userEmail;
+		}
+
+		protected User doInBackground(Context... contexts) {
+
+			User user = null;
+			try {
+				user = userEndpoint.getUser(this.eduEmail).execute();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return user;
+		}
+	}
+
+	/**
+	 * UPDATE A USER WITH THE USERENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param User
+	 *            Object to be persisted in updated form
+	 * @return Updated User Object
+	 */
+	public class updateUserTask extends AsyncTask<Context, Void, User> {
+
+		private User updateUser;
+
+		public updateUserTask(User user) {
+			this.updateUser = user;
+		}
+
+		protected User doInBackground(Context... contexts) {
+
+			User updatedUser = null;
+			try {
+				// TODO: retrieve user from coredata
+				updatedUser = userEndpoint.updateUser(this.updateUser)
+						.execute();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return updatedUser;
+		}
+	}
+
+	/**
+	 * DELETE A USER WITH THE USERENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param Edu
+	 *            Email of user to be deleted
+	 */
+	public class deleteUserTask extends AsyncTask<Context, Integer, Long> {
+
+		private String eduEmail;
+
+		public deleteUserTask(String userEmail) {
+			this.eduEmail = userEmail;
+		}
+
 		protected Long doInBackground(Context... contexts) {
 
-			Userendpoint.Builder endpointBuilder = new Userendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Userendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
 			try {
-				User user = new User().setEduEmail("ugh@seas.upenn.edu");
-				User result = endpoint.insertUser(user).execute();
+				userEndpoint.removeUser(this.eduEmail).execute();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -68,132 +157,94 @@ public class RequestFragment extends Fragment {
 		}
 	}
 
-	// RETRIEVE A USER WITH THE USERENDPOINT BUILDER
-	public class EndpointsTask2 extends AsyncTask<Context, Integer, Long> {
-		protected Long doInBackground(Context... contexts) {
+	/**
+	 * CREATE A REQUEST WITH THE REQUESTENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param Edu
+	 *            Email of user creating the request
+	 * @return created Request Object
+	 */
+	public class createRequestTask extends AsyncTask<Context, Void, Request> {
 
-			Userendpoint.Builder endpointBuilder = new Userendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			Userendpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
+		private String eduEmail;
+
+		public createRequestTask(String userEmail) {
+			this.eduEmail = userEmail;
+		}
+
+		protected Request doInBackground(Context... contexts) {
+
+			Request request = null;
 			try {
-				Long id = 5668600916475904L;
-				User user = endpoint.getUser(id).execute();
+				request = requestEndpoint.insertRequest(
+						new Request().setUserId(this.eduEmail)).execute();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return request;
+		}
+	}
+
+	/**
+	 * RETRIEVE A USER FROM A REQUEST
+	 * 
+	 * @author blotter
+	 * @param Request
+	 * @return User object belonging to request
+	 */
+	public class getUserFromRequestTask extends
+			AsyncTask<Context, Integer, User> {
+
+		private Request request;
+
+		public getUserFromRequestTask(Request request) {
+			this.request = request;
+		}
+
+		protected User doInBackground(Context... contexts) {
+
+			User user = null;
+			try {
+				String userId = request.getUserId();
+				user = userEndpoint.getUser(userId).execute();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (long) 0;
+			return user;
 		}
 	}
 
+	/**
+	 * RETRIEVE A REQUEST FROM A USER
+	 * 
+	 * @author blotter
+	 * @param User
+	 *            object, whose associated request should be retrieved
+	 */
+	public class getRequestFromUserTask extends
+			AsyncTask<Context, Integer, Request> {
 
-	// um trying with messageeendpoints
-	public class EndpointsTask3 extends AsyncTask<Context, Integer, Long> {
-		protected Long doInBackground(Context... contexts) {
+		private User user;
 
-			MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-					new HttpRequestInitializer() {
-						public void initialize(HttpRequest httpRequest) {
-						}
-					});
-			MessageEndpoint endpoint = CloudEndpointUtils.updateBuilder(
-					endpointBuilder).build();
+		public getRequestFromUserTask(User user) {
+			this.user = user;
+		}
+
+		protected Request doInBackground(Context... contexts) {
+
+			Request request = null;
 			try {
-				endpoint.sendMessage("Hello!!!");
+
+				Long requestId = user.getRequestId();
+				request = requestEndpoint.getRequest(requestId).execute();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return (long) 0;
+			return request;
 		}
 	}
-
-	// public class AddUserAsyncTask extends AsyncTask<String, Void, User>{
-	// Context context;
-	// private ProgressDialog pd;
-	//
-	// public AddUserAsyncTask(Context context) {
-	// this.context = context;
-	// }
-	//
-	// protected void onPreExecute(){
-	// super.onPreExecute();
-	// pd = new ProgressDialog(context);
-	// pd.setMessage("Adding the User...");
-	// pd.show();
-	// }
-	//
-	// protected User doInBackground(String... params) {
-	// User response = new User();
-	// try {
-	// Userendpoint.Builder builder = new
-	// Userendpoint.Builder(AndroidHttp.newCompatibleTransport(), new
-	// GsonFactory(), null);
-	// Userendpoint service = builder.build();
-	// User user = new User();
-	//
-	// user.setEduEmail("please!ta!");
-	// HomeActivity activity = (HomeActivity)
-	// RequestFragment.this.getActivity();
-	// user.setName(activity.name);
-	// // After getting user, store in core data
-	// response = service.insertUser(user).execute();
-	//
-	//
-	// System.out.println(response);
-	// // Request part has to be worked on - which fields are necessary?
-	// Request request = new Request();
-	// List<String> prefs = new ArrayList<String>();
-	// prefs.add("hey");
-	// prefs.add("ho");
-	//
-	//
-	// // Used to keyfactory
-	//
-	// //com.google.appengine.api.datastore.Key key =
-	// KeyFactory.createKey("test", "edu");
-	// //request.setKey(key);
-	// // request.setLat(50.1);
-	// // request.setLon(20.2);
-	// request.setUser(response);
-	// request.setRestaurantPreferences(prefs);
-	// System.out.println(request);
-	// Request requestResponse = new Request();
-	// Requestendpoint.Builder requestBuilder = new
-	// Requestendpoint.Builder(AndroidHttp.newCompatibleTransport(), new
-	// GsonFactory(), null);
-	// Requestendpoint reqService = requestBuilder.build();
-	// requestResponse = reqService.insertRequest(request).execute();
-	//
-	//
-	//
-	//
-	//
-	// System.out.println(response);
-	// System.out.println(requestResponse);
-	//
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// Log.d("Could not Add User", e.getMessage(), e);
-	// }
-	// return response;
-	// }
-	//
-	//
-	// protected void onPostExecute(User user) {
-	// //Clear the progress dialog and the fields
-	// pd.dismiss();
-	//
-	// //Display success message to user
-	// Toast.makeText(getView().getContext(), "User added succesfully",
-	// Toast.LENGTH_SHORT).show();
-	// }
-	// }
 
 }

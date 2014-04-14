@@ -184,13 +184,14 @@ public class HomeActivity extends FragmentActivity {
 			fragment = new ProfileFragment();
 			break;
 		case 2:
-			fragment = new RequestFragment();
+			Intent requestIntent = new Intent(this, RequestActivity.class);
+			startActivity(requestIntent); 
 			break;
 		case 3:
 			// Logout
 			session.closeAndClearTokenInformation();
-			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+			Intent logoutIntent = new Intent(this, MainActivity.class);
+			startActivity(logoutIntent);
 			break;
 
 		default:
@@ -200,7 +201,7 @@ public class HomeActivity extends FragmentActivity {
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
-					.replace(R.id.frame_container, fragment).commit();
+					.replace(R.id.home_frame_container, fragment).commit();
 
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
@@ -209,7 +210,7 @@ public class HomeActivity extends FragmentActivity {
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			// error in creating fragment
-			Log.e("MainActivity", "Error in creating fragment");
+			Log.e("HomeActivity", "Error in creating fragment");
 		}
 	}
 

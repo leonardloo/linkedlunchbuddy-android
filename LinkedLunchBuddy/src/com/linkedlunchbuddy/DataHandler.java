@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataHandler {
 
-	public static final String FBID = "fbid"; // Used to check if email should be requested
-	public static final String EMAIL = "email"; // Primary Key for backend
+	public static final String FBID = "fbid";
+	public static final String EMAIL = "email"; // Primary Key for backend, used to check if email should be requested
 	public static final String FIRSTNAME = "firstname";
 	public static final String LASTNAME = "lastname";
 	public static final String GENDER = "gender";

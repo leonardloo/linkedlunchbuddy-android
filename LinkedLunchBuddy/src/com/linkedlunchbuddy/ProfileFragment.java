@@ -21,11 +21,6 @@ public class ProfileFragment extends ListFragment {
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-
-		// Get HomeActivity to retrieve FB profile names, but we will soon do it from core data
-		HomeActivity activity = (HomeActivity) getActivity();
-		//TextView fbName = (TextView) rootView.findViewById(R.id.fbName);
-		//fbName.setText(activity.name);
 		// Define other fields too
 		String[] listItems = {"Email", "Name", "Gender"};
 		boolean[] listImages = {false, true, false};
@@ -58,7 +53,7 @@ public class ProfileFragment extends ListFragment {
 			v.setBackgroundColor(getResources().getColor(android.R.color.tab_indicator_text));
 				FragmentManager fragmentManager = getFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.frame_container, new ProfileNameFragment(), "Profile Name");
+				fragmentTransaction.replace(R.id.home_frame_container, new ProfileNameFragment(), "Profile Name");
 				fragmentTransaction.commit();
 
 		}

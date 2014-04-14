@@ -13,6 +13,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
+
 import com.linkedlunchbuddy.deviceinfoendpoint.Deviceinfoendpoint;
 import com.linkedlunchbuddy.deviceinfoendpoint.model.DeviceInfo;
 
@@ -43,7 +44,7 @@ public class GCMIntentService extends GCMBaseIntentService {
    * http://developers.google.com/eclipse/docs/cloud_endpoints for more
    * information.
    */
-  protected static final String PROJECT_NUMBER = "23081732513";
+  protected static final String PROJECT_NUMBER = "925319909484";
 
   /**
    * Register the device for GCM.

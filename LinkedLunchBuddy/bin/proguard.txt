@@ -1,37 +1,40 @@
 # view res/layout/activity_home.xml #generated:1
 -keep class android.support.v4.widget.DrawerLayout { <init>(...); }
 
-# view AndroidManifest.xml #generated:42
+# view AndroidManifest.xml #generated:72
 -keep class com.facebook.LoginActivity { <init>(...); }
 
 # view res/layout/activity_main.xml #generated:8
 # view res/layout/com_facebook_usersettingsfragment.xml #generated:48
 -keep class com.facebook.widget.LoginButton { <init>(...); }
 
-# view AndroidManifest.xml #generated:44
+# view AndroidManifest.xml #generated:78
 -keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
 
 # view res/layout/activity_map.xml #generated:2
 -keep class com.google.android.gms.maps.MapFragment { <init>(...); }
 
-# view AndroidManifest.xml #generated:38
+# view AndroidManifest.xml #generated:59
 -keep class com.linkedlunchbuddy.BlurbActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:36
+# view AndroidManifest.xml #generated:55
 -keep class com.linkedlunchbuddy.EmailActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:43
+# view AndroidManifest.xml #generated:76
 -keep class com.linkedlunchbuddy.GCMIntentService { <init>(...); }
 
-# view AndroidManifest.xml #generated:32
+# view AndroidManifest.xml #generated:47
 -keep class com.linkedlunchbuddy.HomeActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:25
+# view AndroidManifest.xml #generated:38
 -keep class com.linkedlunchbuddy.MainActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:34
+# view AndroidManifest.xml #generated:51
 -keep class com.linkedlunchbuddy.MapActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:55
+# view AndroidManifest.xml #generated:93
 -keep class com.linkedlunchbuddy.RegisterActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:63
+-keep class com.linkedlunchbuddy.RequestActivity { <init>(...); }
 

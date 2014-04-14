@@ -1,11 +1,19 @@
 package com.linkedlunchbuddy;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import com.linkedlunchbuddy.EmailActivity.CreateUserTask;
+import com.linkedlunchbuddy.userendpoint.model.User;
+
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,10 +61,41 @@ public class ProfileNameFragment extends DialogFragment {
 						dataHandler.open();
 						dataHandler.changeName(firstName.getText().toString(), 
 								lastName.getText().toString());
+						Cursor cursor = dataHandler.allUsers();
+						cursor.moveToFirst();
+						String userEmail = cursor.getString(1);
 						dataHandler.close();
+						// retrieve user from backend
+						User updateUser = null;
+						try {
+							updateUser = new getUserTask(userEmail).execute().get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						//update user
+						updateUser.setName(firstName.getText().toString() + " " + 
+								lastName.getText().toString());
+						User updatedUser = null;
+						try {
+							updatedUser = new updateUserTask(updateUser).execute().get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+
 						FragmentManager fragmentManager = getFragmentManager();
 						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-						fragmentTransaction.replace(R.id.frame_container, new ProfileFragment(), "Profile Name");
+						fragmentTransaction.replace(R.id.home_frame_container, new ProfileFragment(), "Profile Name");
 						fragmentTransaction.commit();
 			        }
 			     })
@@ -77,20 +116,71 @@ public class ProfileNameFragment extends DialogFragment {
 			public void onClick(View v) {
 				FragmentManager fragmentManager = getFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.frame_container, new ProfileFragment(), "Profile Name");
+				fragmentTransaction.replace(R.id.home_frame_container, new ProfileFragment(), "Profile Name");
 				fragmentTransaction.commit();
 			}
 		});
 
 		return rootView;
 	}
-/*
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		EditText firstName = (EditText) getActivity().findViewById(R.id.firstNameField);
-		EditText lastName = (EditText) getActivity().findViewById(R.id.lastNameField);
+	
+	/**
+	 * UPDATE A USER WITH THE USERENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param User
+	 *            Object to be persisted in updated form
+	 * @return Updated User Object
+	 */
+	public class updateUserTask extends AsyncTask<Context, Void, User> {
 
-		firstName.setText("First name");
+		private User updateUser;
+
+		public updateUserTask(User user) {
+			this.updateUser = user;
+		}
+
+		protected User doInBackground(Context... contexts) {
+
+			User updatedUser = null;
+			try {
+			
+				updatedUser = EndpointController.getUserEndpoint().updateUser(this.updateUser)
+						.execute();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return updatedUser;
+		}
 	}
-*/
+	
+	/**
+	 * RETRIEVE A USER WITH THE USERENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param User
+	 *            Edu Email
+	 * @return User Object
+	 */
+	public class getUserTask extends AsyncTask<Context, Void, User> {
+
+		private String eduEmail;
+
+		public getUserTask(String userEmail) {
+
+			this.eduEmail = userEmail;
+		}
+
+		protected User doInBackground(Context... contexts) {
+
+			User user = null;
+			try {
+				user = EndpointController.getUserEndpoint().getUser(this.eduEmail).execute();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return user;
+		}
+	}
 }

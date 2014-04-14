@@ -19,13 +19,6 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// Start up RegisterActivity right away
-		// Temporarily bypass RegisterActivity
-//		Intent intent = new Intent(this, RegisterActivity.class);
-//		startActivity(intent);
-//		 Since this is just a wrapper to start the main activity,
-//		 finish it after launching RegisterActivity
-//		finish();
 		if (savedInstanceState == null) {
 	        // Add the fragment on initial activity setup
 	        mainFragment = new MainFragment();

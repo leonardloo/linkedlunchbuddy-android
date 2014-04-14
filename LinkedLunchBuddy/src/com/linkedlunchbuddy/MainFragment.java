@@ -40,6 +40,7 @@ public class MainFragment extends Fragment {
 			dataHandler.open();
 	        Intent intent;
 			// If data handler already has an entry, do not let user register again
+	        // TODO: Authenticate for multiple users
 			if (dataHandler.allUsers().getCount() > 0) {
 				intent = new Intent(getActivity(), HomeActivity.class);
 			} else {

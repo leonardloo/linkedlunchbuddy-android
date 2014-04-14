@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="40dip"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/listNearbyPlaces"
+            android:layout_width="match_parent"
+            android:layout_height="298dp" />
+
+        <Button
+            android:id="@+id/doneWithRequestRestaurantButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:gravity="center"
+            android:paddingBottom="20dip"
+            android:text="Confirm Request >"
+            android:textColor="@color/gray"
+            android:textSize="20dip" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/restaurantRequestHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Nearby Restaurants" />
+
+</RelativeLayout>
