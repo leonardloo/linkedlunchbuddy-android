@@ -1,0 +1,214 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://linear-axle-547.appspot.com/_ah/api",
+  "name" : "requestendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://linear-axle-547.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "linkedlunchbuddy.com",
+  "ownerName" : "linkedlunchbuddy.com",
+  "methods" : {
+    "requestendpoint.getRequest" : {
+      "path" : "request/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.getRequest",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "requestendpoint.listRequest" : {
+      "path" : "request",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.listRequest",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "requestendpoint.updateRequest" : {
+      "path" : "request",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.updateRequest",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "requestendpoint.insertRequest" : {
+      "path" : "request",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.insertRequest",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "requestendpoint.removeRequest" : {
+      "path" : "request/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.removeRequest",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Request" : {
+        "id" : "Request",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "startTime" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "endTime" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "userId" : {
+            "type" : "string"
+          },
+          "restaurantPreferences" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "lat" : {
+            "type" : "number"
+          },
+          "lon" : {
+            "type" : "number"
+          },
+          "user" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CollectionResponse_Request" : {
+        "id" : "CollectionResponse_Request",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Request"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.linkedlunchbuddy.RequestEndpoint.getRequest" : {
+        "response" : {
+          "$ref" : "Request"
+        }
+      },
+      "com.linkedlunchbuddy.RequestEndpoint.listRequest" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Request"
+        }
+      },
+      "com.linkedlunchbuddy.RequestEndpoint.updateRequest" : {
+        "request" : {
+          "$ref" : "Request"
+        },
+        "response" : {
+          "$ref" : "Request"
+        }
+      },
+      "com.linkedlunchbuddy.RequestEndpoint.insertRequest" : {
+        "request" : {
+          "$ref" : "Request"
+        },
+        "response" : {
+          "$ref" : "Request"
+        }
+      },
+      "com.linkedlunchbuddy.RequestEndpoint.removeRequest" : {
+      }
+    }
+  }
+}

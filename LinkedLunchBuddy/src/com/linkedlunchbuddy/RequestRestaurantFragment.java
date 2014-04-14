@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
@@ -29,6 +32,7 @@ public class RequestRestaurantFragment extends Fragment {
 	public static final double DEFAULT_RADIUS = 1000;
 
 	ArrayList<GoogleLocation> locations;
+	private TextView header;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,14 +130,13 @@ public class RequestRestaurantFragment extends Fragment {
 					GoogleLocation location = (GoogleLocation) listView
 							.getAdapter().getItem(position);
 					boolean selectedState = location.toggleSelected();
-
 					// Assemble List of Restaurant IDs
 					// TODO: Figure out how to highlight listView cell
 					// background upon selection
-					/*
-					parent.getChildAt(position).setBackgroundColor(
-							getResources().getColor(R.color.gray));
-							*/
+					//view.setBackgroundColor(getResources().getColor(R.color.gray));
+					
+					/*parent.getChildAt(position).setBackgroundColor(
+							getResources().getColor(R.color.gray));*/
 				}
 
 			});

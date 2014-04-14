@@ -24,7 +24,6 @@ import com.appspot.linear_axle_547.requestcontroller.model.LunchDate;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
 import com.linkedlunchbuddy.requestendpoint.model.Request;
 
-
 public class RequestSubmitFragment extends Fragment {
 
 	private Request requestResponse;
@@ -33,39 +32,45 @@ public class RequestSubmitFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_requestsubmit, container,
-				false);
+		View rootView = inflater.inflate(R.layout.fragment_requestsubmit,
+				container, false);
 		RequestActivity activity = (RequestActivity) getActivity();
 		// Get date and display
-		TextView startDateText = (TextView) rootView.findViewById(R.id.startDateInfo);
-		TextView endDateText = (TextView) rootView.findViewById(R.id.endDateInfo);
+		TextView startDateText = (TextView) rootView
+				.findViewById(R.id.startDateInfo);
+		TextView endDateText = (TextView) rootView
+				.findViewById(R.id.endDateInfo);
 
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		Date startTime = new Date(activity.getRequest().getStartTime());
-		Date endTime = new Date(activity.getRequest().getEndTime());
+		Date startTime = new Date(activity.getRequest().getStartTime()*1000L);
+		Date endTime = new Date(activity.getRequest().getEndTime()*1000L);
 		String startTimeString = df.format(startTime);
 		String endTimeString = df.format(endTime);
 		startDateText.setText("Start Date: " + startTimeString);
 		endDateText.setText("End Date: " + endTimeString);
 
 		// Get restaurants and display
-		TextView restaurantText = (TextView) rootView.findViewById(R.id.listOfRestaurantsInfo);
+		TextView restaurantText = (TextView) rootView
+				.findViewById(R.id.listOfRestaurantsInfo);
 		List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
 		for (GoogleLocation restaurant : restaurants) {
-			restaurantText.setText(restaurantText.getText() + "\n" + restaurant.getName());
+			restaurantText.setText(restaurantText.getText() + "\n"
+					+ restaurant.getName());
 		}
 
 		// Submit request button
 
-		Button submitButton = (Button) rootView.findViewById(R.id.submitRequestButton);
+		Button submitButton = (Button) rootView
+				.findViewById(R.id.submitRequestButton);
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Launch AsyncTask
 				try {
 					requestResponse = new createRequestTask(
-							((RequestActivity)RequestSubmitFragment.this.getActivity()).getRequest()).
-							execute().get();
+							((RequestActivity) RequestSubmitFragment.this
+									.getActivity()).getRequest()).execute()
+							.get();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -76,19 +81,26 @@ public class RequestSubmitFragment extends Fragment {
 
 				// Match
 
-				Long requestId = Long.valueOf(5113880120393728L); // Armen's request ID
-//				long requestId = Long.valueOf(requestResponse.getId());
+				Long requestId = Long.valueOf(5113880120393728L); 
+//				 Long requestId = Long.valueOf(requestResponse.getId());
 				try {
 					LunchDate result = new FindMatchTask(requestId).execute(
 							getActivity().getApplicationContext()).get();
 
-					String matchBuddy = result.getRequestB().getUserId();
+					String resultText = null;
+					System.out.println(result);
+					if (result == null) {
+						resultText = "Sorry, we could not find a match at this time";
+					} else {
+						String matchBuddy = result.getRequestB().getUserId();
 
-					Context context = getActivity().getApplicationContext();
-					CharSequence text = "Congratulations! You have a match with " + matchBuddy + "!" ;
+						resultText = "Congratulations! You have a match with "
+								+ matchBuddy + "!";
+
+					}
 					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
+					Context context = getActivity().getApplicationContext();
+					Toast toast = Toast.makeText(context, resultText, duration);
 					toast.show();
 
 				} catch (InterruptedException e) {
@@ -96,82 +108,79 @@ public class RequestSubmitFragment extends Fragment {
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
-			
 
-			// Throw a Toast of your match
+				// Throw a Toast of your match
 
-			// TODO: Move back to HomeActivity selectively after submitting Request
-			Intent intent = new Intent(getActivity(), HomeActivity.class);
+				// TODO: Move back to HomeActivity selectively after submitting
+				// Request
+				Intent intent = new Intent(getActivity(), HomeActivity.class);
 
-			startActivity(intent);
-		}		
+				startActivity(intent);
+			}
 
-	});
-		
-		requestResponse.getId();
+		});
 
-
+		// requestResponse.getId();
 
 		return rootView;
 
-
-}
-
-/**
- * CREATE A REQUEST WITH THE REQUESTENDPOINT BUILDER
- * 
- * @author blotter
- * @param Edu
- *            Email of user creating the request
- * @return created Request Object
- */
-public class createRequestTask extends AsyncTask<Context, Void, Request> {
-
-	private Request request;
-
-	public createRequestTask(Request request) {
-		this.request = request;
 	}
 
-	protected Request doInBackground(Context... contexts) {
+	/**
+	 * CREATE A REQUEST WITH THE REQUESTENDPOINT BUILDER
+	 * 
+	 * @author blotter
+	 * @param Edu
+	 *            Email of user creating the request
+	 * @return created Request Object
+	 */
+	public class createRequestTask extends AsyncTask<Context, Void, Request> {
 
-		Request requestResponse = null;
-		try {
-			requestResponse = EndpointController.getRequestEndpoint().insertRequest(this.request).execute();
-		} catch (IOException e) {
-			e.printStackTrace();
+		private Request request;
+
+		public createRequestTask(Request request) {
+			this.request = request;
 		}
-		return requestResponse;
-	}
-}
 
-/**
- * FIND A MATCH FOR A REQUEST
- * 
- */
-public class FindMatchTask extends AsyncTask<Context, Integer, LunchDate> {
+		protected Request doInBackground(Context... contexts) {
 
-	private Long requestId;
-
-	public FindMatchTask(Long requestId) {
-		this.requestId = requestId;
-	}
-
-	protected LunchDate doInBackground(Context... contexts) {
-
-		LunchDate lunchDate = null;
-		try {
-
-			// Get match for the request
-			lunchDate = EndpointController.getRequestController().findMatch(requestId).execute();
-
-		} catch (IOException e) {
-			e.printStackTrace();
+			Request requestResponse = null;
+			try {
+				requestResponse = EndpointController.getRequestEndpoint()
+						.insertRequest(this.request).execute();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return requestResponse;
 		}
-		return lunchDate;
 	}
-}
 
+	/**
+	 * FIND A MATCH FOR A REQUEST
+	 * 
+	 */
+	public class FindMatchTask extends AsyncTask<Context, Integer, LunchDate> {
 
+		private Long requestId;
+
+		public FindMatchTask(Long requestId) {
+			this.requestId = requestId;
+		}
+
+		protected LunchDate doInBackground(Context... contexts) {
+
+			LunchDate lunchDate = null;
+			try {
+
+				// Get match for the request
+				lunchDate = EndpointController.getRequestController()
+						.findMatch(requestId).execute();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return lunchDate;
+		}
+	}
 
 }

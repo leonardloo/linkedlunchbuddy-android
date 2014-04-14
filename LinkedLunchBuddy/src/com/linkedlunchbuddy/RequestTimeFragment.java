@@ -2,6 +2,7 @@ package com.linkedlunchbuddy;
 
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -104,9 +105,13 @@ public class RequestTimeFragment extends Fragment {
 			public void onTimeSet(TimePicker arg0, int hour, int minute) {
 				cal.set(Calendar.HOUR_OF_DAY, hour);
 				cal.set(Calendar.MINUTE, minute);
-
-				startTimeLabel.setText("Time: " + new StringBuilder().append(hour+":")
+				if (minute < 10) {
+				startTimeLabel.setText("Start Time: " + new StringBuilder().append(hour+":0")
 						.append(minute));
+				} else {
+					startTimeLabel.setText("Start Time: " + new StringBuilder().append(hour+":")
+							.append(minute));
+				}
 				RequestTimeFragment.this.startHour = hour;
 				RequestTimeFragment.this.startMinute = minute;
 			}
@@ -116,12 +121,15 @@ public class RequestTimeFragment extends Fragment {
 
 			@Override
 			public void onTimeSet(TimePicker arg0, int hour, int minute) {
-				// Set to 1 hour after current time
-				cal.set(Calendar.HOUR_OF_DAY + 1, hour);
+				cal.set(Calendar.HOUR_OF_DAY, hour);
 				cal.set(Calendar.MINUTE, minute);
-
-				endTimeLabel.setText("Time: " + new StringBuilder().append(hour+":")
+				if (minute < 10) {
+				endTimeLabel.setText("End Time: " + new StringBuilder().append(hour+":0")
 						.append(minute));
+				} else {
+					endTimeLabel.setText("End Time: " + new StringBuilder().append(hour+":")
+							.append(minute));
+				}
 				RequestTimeFragment.this.endHour = hour;
 				RequestTimeFragment.this.endMinute = minute;
 			}
@@ -133,6 +141,10 @@ public class RequestTimeFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+				System.out.println(RequestTimeFragment.this.startHour);
+				System.out.println(RequestTimeFragment.this.startMinute);
+				System.out.println(RequestTimeFragment.this.endHour);
+				System.out.println(RequestTimeFragment.this.endMinute);
 				if (RequestTimeFragment.this.year == -1 ||
 						RequestTimeFragment.this.month == -1 ||
 						RequestTimeFragment.this.day == -1 ||
@@ -144,6 +156,7 @@ public class RequestTimeFragment extends Fragment {
 				} else {
 					// Convert to UNIX time and set it in Activity
 					RequestActivity activity = (RequestActivity) getActivity();
+
 					long unixStartTime = unixTime(RequestTimeFragment.this.year, 
 							RequestTimeFragment.this.month,
 							RequestTimeFragment.this.day,
@@ -174,11 +187,11 @@ public class RequestTimeFragment extends Fragment {
 		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month);
 		c.set(Calendar.DAY_OF_MONTH, day);
-		c.set(Calendar.HOUR, hour);
+		c.set(Calendar.HOUR_OF_DAY, hour);
 		c.set(Calendar.MINUTE, minute);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
-		return (c.getTimeInMillis() / 1000L);
+		return (c.getTimeInMillis()/1000L);
 	}
 
 }
