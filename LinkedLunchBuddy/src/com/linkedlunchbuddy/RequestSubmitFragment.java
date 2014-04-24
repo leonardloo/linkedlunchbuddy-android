@@ -81,8 +81,8 @@ public class RequestSubmitFragment extends Fragment {
 
 				// Match
 
-				Long requestId = Long.valueOf(5113880120393728L); 
-//				 Long requestId = Long.valueOf(requestResponse.getId());
+//				Long requestId = Long.valueOf(5113880120393728L);
+				Long requestId = Long.valueOf(requestResponse.getId());
 				try {
 					LunchDate result = new FindMatchTask(requestId).execute(
 							getActivity().getApplicationContext()).get();

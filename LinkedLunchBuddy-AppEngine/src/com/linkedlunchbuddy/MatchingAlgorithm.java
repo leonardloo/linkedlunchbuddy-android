@@ -5,7 +5,7 @@ import java.util.Collection;
 public class MatchingAlgorithm {
 
 	private static final String DEFAULT_RESTAURANT_ID = "restaurantId";
-	private static final long ONE_HOUR = 60 * 60 * 1000;
+	private static final long ONE_HOUR = 60 * 60;
 	
 	static class MatchResult {
 
