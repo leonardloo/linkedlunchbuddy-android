@@ -21,7 +21,7 @@ public class HomeFragment extends Fragment {
 
 	// Google Map
 	private GoogleMap googleMap;
-	private LatLng currentLocation;
+	private LatLng selectedLocation;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,35 +34,20 @@ public class HomeFragment extends Fragment {
 			// Loading map
 			initializeMap();
 
-			LocationManager locationManager = (LocationManager) getActivity()
-					.getSystemService(Context.LOCATION_SERVICE);
+			// Get current location, store, and add a marker
+			setCurrentLocation();
 
-			// latitude and longitude
+			// Allow user to move marker
+			googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
-			Criteria criteria = new Criteria();
-			criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-			String provider = locationManager.getBestProvider(criteria, true);
-
-			android.location.Location location = locationManager
-					.getLastKnownLocation(provider);
-
-			// set current location
-			currentLocation = new LatLng(location.getLatitude(),
-					location.getLongitude());
-
-			// create marker
-			MarkerOptions marker = new MarkerOptions()
-					.position(currentLocation).title("You are here!");
-
-			// adding marker
-			googleMap.addMarker(marker);
-
-			CameraPosition cameraPosition = new CameraPosition.Builder()
-					.target(currentLocation).zoom(12).build();
-
-			googleMap.animateCamera(CameraUpdateFactory
-					.newCameraPosition(cameraPosition));
-
+				@Override
+				public void onMapClick(LatLng point) {
+					selectedLocation = point;
+					googleMap.clear();
+					googleMap.addMarker(new MarkerOptions().position(point));
+					adjustCamera();
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,4 +72,37 @@ public class HomeFragment extends Fragment {
 		}
 	}
 
+	private void setCurrentLocation() {
+		LocationManager locationManager = (LocationManager) getActivity()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		// Set current location
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+		String provider = locationManager.getBestProvider(criteria, true);
+
+		android.location.Location location = locationManager
+				.getLastKnownLocation(provider);
+
+		selectedLocation = new LatLng(location.getLatitude(),
+				location.getLongitude());
+
+		// create marker
+		MarkerOptions marker = new MarkerOptions().position(selectedLocation)
+				.title("You are here!");
+
+		// adding marker
+		googleMap.addMarker(marker);
+		
+		adjustCamera();
+
+	}
+
+	private void adjustCamera() {
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+				.target(selectedLocation).zoom(12).build();
+
+		googleMap.animateCamera(CameraUpdateFactory
+				.newCameraPosition(cameraPosition));
+	}
 }
