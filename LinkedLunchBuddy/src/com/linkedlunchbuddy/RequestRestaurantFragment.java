@@ -32,8 +32,9 @@ public class RequestRestaurantFragment extends Fragment {
 
 	public static final double DEFAULT_RADIUS = 1000;
 
-	ArrayList<GoogleLocation> locations;
+	private ArrayList<GoogleLocation> locations;
 	private TextView header;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,7 @@ public class RequestRestaurantFragment extends Fragment {
 			RequestActivity reqActivity = (RequestActivity) getActivity();
 			double lat = reqActivity.getLocationLat();
 			double lon = reqActivity.getLocationLon();
+			// 39.95, -75.17
 			this.locations= new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -80,10 +82,12 @@ public class RequestRestaurantFragment extends Fragment {
 				activity.setSelectedRestaurants(selectedRestaurants);
 				
 				// Move over to RequestSubmitFragment
+				/*
 				FragmentManager fragmentManager = RequestRestaurantFragment.this.getActivity().getSupportFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 				fragmentTransaction.replace(R.id.request_frame_container, new RequestSubmitFragment(), "Request Submit");
 				fragmentTransaction.commit();
+				*/
 			}
 		});
 		return rootView;
@@ -129,6 +133,8 @@ public class RequestRestaurantFragment extends Fragment {
 					GoogleLocation location = (GoogleLocation) listView
 							.getAdapter().getItem(position);
 					boolean selectedState = location.toggleSelected();
+					// TODO: Toggle listview item view to set and not set booleans
+					view.setActivated(true);
 					// Assemble List of Restaurant IDs
 					// TODO: Figure out how to highlight listView cell
 					// background upon selection

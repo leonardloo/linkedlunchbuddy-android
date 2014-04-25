@@ -133,7 +133,6 @@ public class HomeFragment extends Fragment {
         public RequestStartWindowAdapter() {
            view = activity.getLayoutInflater().inflate(R.layout.request_start_window,
                     null);
-           System.out.println("info got initialized!!!?!?!?!?!?");
         }
  
         @Override

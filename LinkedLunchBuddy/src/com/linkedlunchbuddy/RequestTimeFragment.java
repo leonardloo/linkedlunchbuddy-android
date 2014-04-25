@@ -169,10 +169,12 @@ public class RequestTimeFragment extends Fragment {
 							RequestTimeFragment.this.endMinute);
 					activity.setTime(unixStartTime, unixEndTime);
 					// Move over to RequestRestaurantFragment
+					/*
 					FragmentManager fragmentManager = RequestTimeFragment.this.getActivity().getSupportFragmentManager();
 					FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 					fragmentTransaction.replace(R.id.request_frame_container, new RequestRestaurantFragment(), "Request Restaurant");
 					fragmentTransaction.commit();
+					*/
 				}
 			}
 		});
