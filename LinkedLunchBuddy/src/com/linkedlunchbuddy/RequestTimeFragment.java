@@ -22,7 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
-public class RequestTimeFragment extends Fragment {
+public class RequestTimeFragment extends RequestTabFragment {
 
 	private Calendar cal = Calendar.getInstance();
 	private DateFormat dt = new DateFormat();
@@ -196,6 +196,15 @@ public class RequestTimeFragment extends Fragment {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		return (c.getTimeInMillis()/1000L);
+	}
+	
+	
+	/*
+	 * RequestTabFragment inherited methods
+	 */
+
+	public void updateData() {
+
 	}
 
 }

@@ -28,15 +28,15 @@ import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
 import com.linkedlunchbuddy.placesapi.GooglePlacesAPI;
 
-public class RequestRestaurantFragment extends Fragment {
+public class RequestRestaurantFragment extends RequestTabFragment {
 
 	public static final double DEFAULT_RADIUS = 1000;
 
 	private ArrayList<GoogleLocation> locations;
 	private TextView header;
-	
-	public RequestRestaurantFragment(){
-		
+
+	public RequestRestaurantFragment() {
+
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class RequestRestaurantFragment extends Fragment {
 			double lat = reqActivity.getLocationLat();
 			double lon = reqActivity.getLocationLon();
 			// 39.95, -75.17
-			this.locations= new SetupListTask(lat, lon).execute().get();
+			this.locations = new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -72,7 +72,7 @@ public class RequestRestaurantFragment extends Fragment {
 		confirmButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				List<GoogleLocation> selectedRestaurants = new ArrayList<GoogleLocation>();
 				for (GoogleLocation loc : locations) {
 					if (loc.isSelected()) {
@@ -81,19 +81,32 @@ public class RequestRestaurantFragment extends Fragment {
 				}
 				// SelectedRestaurants only contains the GooglePlace objects
 				// selected by user
-				RequestActivity activity = (RequestActivity) RequestRestaurantFragment.this.getActivity();
+				RequestActivity activity = (RequestActivity) RequestRestaurantFragment.this
+						.getActivity();
 				activity.setSelectedRestaurants(selectedRestaurants);
-				
+
 				// Move over to RequestSubmitFragment
 				/*
-				FragmentManager fragmentManager = RequestRestaurantFragment.this.getActivity().getSupportFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.request_frame_container, new RequestSubmitFragment(), "Request Submit");
-				fragmentTransaction.commit();
-				*/
+				 * FragmentManager fragmentManager =
+				 * RequestRestaurantFragment.this
+				 * .getActivity().getSupportFragmentManager();
+				 * FragmentTransaction fragmentTransaction =
+				 * fragmentManager.beginTransaction();
+				 * fragmentTransaction.replace(R.id.request_frame_container, new
+				 * RequestSubmitFragment(), "Request Submit");
+				 * fragmentTransaction.commit();
+				 */
 			}
 		});
 		return rootView;
+
+	}
+
+	/*
+	 * RequestTabFragment inherited methods
+	 */
+
+	public void updateData() {
 
 	}
 
@@ -136,15 +149,18 @@ public class RequestRestaurantFragment extends Fragment {
 					GoogleLocation location = (GoogleLocation) listView
 							.getAdapter().getItem(position);
 					boolean selectedState = location.toggleSelected();
-					// TODO: Toggle listview item view to set and not set booleans
+					// TODO: Toggle listview item view to set and not set
+					// booleans
 					view.setActivated(true);
 					// Assemble List of Restaurant IDs
 					// TODO: Figure out how to highlight listView cell
 					// background upon selection
-					//view.setBackgroundColor(getResources().getColor(R.color.gray));
-					
-					/*parent.getChildAt(position).setBackgroundColor(
-							getResources().getColor(R.color.gray));*/
+					// view.setBackgroundColor(getResources().getColor(R.color.gray));
+
+					/*
+					 * parent.getChildAt(position).setBackgroundColor(
+					 * getResources().getColor(R.color.gray));
+					 */
 				}
 
 			});
