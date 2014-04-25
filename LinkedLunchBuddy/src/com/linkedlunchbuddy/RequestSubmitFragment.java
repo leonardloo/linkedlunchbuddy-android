@@ -3,6 +3,7 @@ package com.linkedlunchbuddy;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -126,30 +127,24 @@ public class RequestSubmitFragment extends RequestTabFragment {
 	public void updateData() {
 		activity = (RequestActivity) getActivity();
 		if (activity != null) {
+			// Set Request unix time
+			long startUnixTime = unixTime(activity.getYear(), activity.getMonth(), activity.getDay(), activity.getStartHour(), activity.getStartMinute());
+			long endUnixTime = unixTime(activity.getYear(), activity.getMonth(), activity.getDay(), activity.getEndHour(), activity.getEndMinute());
+			
+			
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-		Long startTime = 0L;
-		Long endTime = 0L;
-		
-			if (activity.getRequest() != null) {
-				startTime = activity.getRequest().getStartTime();
-				endTime = activity.getRequest().getEndTime();
-				if (startTime == null || endTime == null) {
-					startTime = 0L;
-					endTime = 0L;
-				}
-			}
-		
-
-		startTimeDate = new Date(startTime * 1000L);
-		endTimeDate = new Date(endTime * 1000L);
+		startTimeDate = new Date(startUnixTime * 1000L);
+		endTimeDate = new Date(endUnixTime * 1000L);
 		String startTimeString = df.format(startTimeDate);
 		String endTimeString = df.format(endTimeDate);
-		
+			
+			
 		startDateText = (TextView) rootView.findViewById(R.id.startDateInfo);
 		endDateText = (TextView) rootView.findViewById(R.id.endDateInfo);
 		startDateText.setText("Start Date: " + startTimeString);
 		endDateText.setText("End Date: " + endTimeString);
+		
 
 		// // Get restaurants and display
 		TextView restaurantText = (TextView) rootView
@@ -223,6 +218,23 @@ public class RequestSubmitFragment extends RequestTabFragment {
 			}
 			return lunchDate;
 		}
+	}
+	
+	/**
+	 * Unix time conversion
+	 */
+
+	// Helper method to convert to UNIX time
+	private long unixTime(int year, int month, int day, int hour, int minute) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month);
+		c.set(Calendar.DAY_OF_MONTH, day);
+		c.set(Calendar.HOUR_OF_DAY, hour);
+		c.set(Calendar.MINUTE, minute);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return (c.getTimeInMillis() / 1000L);
 	}
 
 }

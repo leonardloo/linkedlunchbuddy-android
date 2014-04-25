@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:theme="@style/RequestStyle">
+    android:orientation="vertical"
+    android:theme="@style/RequestStyle" >
 
     <TextView
         android:id="@+id/dateLabel"
@@ -14,15 +14,6 @@
         android:layout_marginLeft="50dp"
         android:layout_marginTop="64dp"
         android:text="Date: " />
-
-    <TextView
-        android:id="@+id/startTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateLabel"
-        android:layout_below="@+id/dateLabel"
-        android:layout_marginTop="48dp"
-        android:text="Start Time: " />
 
     <Button
         android:id="@+id/dateButton"
@@ -35,6 +26,15 @@
         android:layout_marginRight="26dp"
         android:text="Set Date" />
 
+    <TextView
+        android:id="@+id/startTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateLabel"
+        android:layout_below="@+id/dateLabel"
+        android:layout_marginTop="48dp"
+        android:text="Start Time: " />
+
     <Button
         android:id="@+id/startTimeButton"
         style="@style/LBButtonSmall"
@@ -43,7 +43,7 @@
         android:layout_alignBaseline="@+id/startTimeLabel"
         android:layout_alignBottom="@+id/startTimeLabel"
         android:layout_alignRight="@+id/dateButton"
-        android:text="Set Time" />
+        android:text="Set Start Time" />
 
     <TextView
         android:id="@+id/endTimeLabel"
@@ -62,16 +62,6 @@
         android:layout_alignBaseline="@+id/endTimeLabel"
         android:layout_alignBottom="@+id/endTimeLabel"
         android:layout_alignLeft="@+id/dateButton"
-        android:text="Set Time" />
-
-    <Button
-        android:id="@+id/doneWithRequestTimeButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/endTimeButton"
-        android:layout_marginTop="41dp"
-        android:padding="20dp"
-        android:text="Choose Restaurants >" />
+        android:text=" Set End Time " />
 
 </RelativeLayout>

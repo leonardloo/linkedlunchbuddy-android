@@ -155,7 +155,7 @@ int drawable ic_whats_hot 0x7f020045
 int drawable list_item_bg_normal 0x7f020046
 int drawable list_item_bg_pressed 0x7f020047
 int drawable list_selector 0x7f020048
-int id action_settings 0x7f04004c
+int id action_settings 0x7f04004b
 int id authButton 0x7f040010
 int id blurbText 0x7f040009
 int id blurbWelcome 0x7f040008
@@ -184,7 +184,6 @@ int id counter 0x7f04002f
 int id dateButton 0x7f040045
 int id dateLabel 0x7f040043
 int id doneWithRequestRestaurantButton 0x7f04003d
-int id doneWithRequestTimeButton 0x7f040049
 int id drawer_layout 0x7f04000d
 int id emailEnterButton 0x7f04000c
 int id emailField 0x7f04000b
@@ -226,12 +225,12 @@ int id startDateInfo 0x7f04003f
 int id startHomeButton 0x7f040007
 int id startTimeButton 0x7f040046
 int id startTimeLabel 0x7f040044
-int id start_request 0x7f04004b
+int id start_request 0x7f04004a
 int id submitRequestButton 0x7f040041
 int id terrain 0x7f040005
 int id textView1 0x7f04000a
 int id title 0x7f04002e
-int id txtLocationName 0x7f04004a
+int id txtLocationName 0x7f040049
 int integer google_play_services_version 0x7f0a0000
 int layout activity_blurb 0x7f030000
 int layout activity_email 0x7f030001

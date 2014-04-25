@@ -27,6 +27,13 @@ public class RequestActivity extends FragmentActivity {
 	private Request currentRequest;
 	private double locationLat;
 	private double locationLon;
+	private int year = -1;
+	private int month = -1;
+	private int day = -1;
+	private int startHour = -1;
+	private int startMinute = -1;
+	private int endHour = -1;
+	private int endMinute = -1;
 
 	private List<GoogleLocation> selectedRestaurants;
 
@@ -188,4 +195,61 @@ public class RequestActivity extends FragmentActivity {
 
 	}
 
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
+	}
+
+	public int getStartHour() {
+		return startHour;
+	}
+
+	public void setStartHour(int startHour) {
+		this.startHour = startHour;
+	}
+
+	public int getStartMinute() {
+		return startMinute;
+	}
+
+	public void setStartMinute(int startMinute) {
+		this.startMinute = startMinute;
+	}
+
+	public int getEndHour() {
+		return endHour;
+	}
+
+	public void setEndHour(int endHour) {
+		this.endHour = endHour;
+	}
+
+	public int getEndMinute() {
+		return endMinute;
+	}
+
+	public void setEndMinute(int endMinute) {
+		this.endMinute = endMinute;
+	}
+
+	
 }

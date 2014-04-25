@@ -151,7 +151,11 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 					boolean selectedState = location.toggleSelected();
 					// TODO: Toggle listview item view to set and not set
 					// booleans
-					view.setActivated(true);
+					if (selectedState) {
+						view.setActivated(true); 
+					} else {
+						view.setActivated(false);
+					}
 					// Assemble List of Restaurant IDs
 					// TODO: Figure out how to highlight listView cell
 					// background upon selection

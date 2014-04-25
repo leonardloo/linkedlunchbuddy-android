@@ -415,7 +415,7 @@ containing a value of this type.
         public static final int list_selector=0x7f020048;
     }
     public static final class id {
-        public static final int action_settings=0x7f04004c;
+        public static final int action_settings=0x7f04004b;
         public static final int authButton=0x7f040010;
         public static final int blurbText=0x7f040009;
         public static final int blurbWelcome=0x7f040008;
@@ -444,7 +444,6 @@ containing a value of this type.
         public static final int dateButton=0x7f040045;
         public static final int dateLabel=0x7f040043;
         public static final int doneWithRequestRestaurantButton=0x7f04003d;
-        public static final int doneWithRequestTimeButton=0x7f040049;
         public static final int drawer_layout=0x7f04000d;
         public static final int emailEnterButton=0x7f04000c;
         public static final int emailField=0x7f04000b;
@@ -486,12 +485,12 @@ containing a value of this type.
         public static final int startHomeButton=0x7f040007;
         public static final int startTimeButton=0x7f040046;
         public static final int startTimeLabel=0x7f040044;
-        public static final int start_request=0x7f04004b;
+        public static final int start_request=0x7f04004a;
         public static final int submitRequestButton=0x7f040041;
         public static final int terrain=0x7f040005;
         public static final int textView1=0x7f04000a;
         public static final int title=0x7f04002e;
-        public static final int txtLocationName=0x7f04004a;
+        public static final int txtLocationName=0x7f040049;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f0a0000;
