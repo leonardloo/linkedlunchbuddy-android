@@ -448,7 +448,7 @@ containing a value of this type.
         public static final int list_selector=0x7f02004a;
     }
     public static final class id {
-        public static final int action_settings=0x7f05004b;
+        public static final int action_settings=0x7f05004c;
         public static final int authButton=0x7f050010;
         public static final int blurbText=0x7f050009;
         public static final int blurbWelcome=0x7f050008;
@@ -519,6 +519,7 @@ containing a value of this type.
         public static final int startHomeButton=0x7f050007;
         public static final int startTimeButton=0x7f050046;
         public static final int startTimeLabel=0x7f050044;
+        public static final int start_request=0x7f05004b;
         public static final int submitRequestButton=0x7f050041;
         public static final int terrain=0x7f050003;
         public static final int textView1=0x7f05000a;
@@ -560,6 +561,7 @@ containing a value of this type.
         public static final int fragment_requestsubmit=0x7f03001c;
         public static final int fragment_requesttime=0x7f03001d;
         public static final int google_location_list_item=0x7f03001e;
+        public static final int request_start_window=0x7f03001f;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;

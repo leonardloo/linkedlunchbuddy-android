@@ -281,6 +281,8 @@ public class HomeActivity extends FragmentActivity {
 		// For scenarios where the main activity is launched and user
 		// session is not null, the session state change notification
 		// may not be triggered. Trigger it if it's open/closed.
+		
+		//TODO:Handle resuming
 		session.addCallback(callback);
 		if (session != null &&
 				(session.isOpened() || session.isClosed()) ) {

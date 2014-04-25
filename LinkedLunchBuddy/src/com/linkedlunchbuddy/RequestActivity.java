@@ -3,6 +3,7 @@ package com.linkedlunchbuddy;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,14 +18,25 @@ public class RequestActivity extends FragmentActivity {
 	// Immediately launches RequestTimeFragment
 	private RequestTimeFragment requestTimeFragment;
 	private Request currentRequest;
+	private double locationLat;
+	private double locationLon;
 	
 	private List<GoogleLocation> selectedRestaurants;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		Bundle extras = getIntent().getExtras();
+		// When entered from google maps
+		if (extras.getBoolean("FROM GOOGLE MAPS")) {
+			locationLat = extras.getDouble("LATITUDE");
+			locationLon = extras.getDouble("LONGITUDE");
+		}
+		
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_request);
-		
 		// Initialization of Request fields
 		currentRequest = new Request();
 		// Set user
@@ -79,7 +91,17 @@ public class RequestActivity extends FragmentActivity {
 		
 		
 	}
-	
+
+	public double getLocationLat() {
+		return locationLat;
+	}
+
+
+	public double getLocationLon() {
+		return locationLon;
+	}
+
+
 	
 	
 

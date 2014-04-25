@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,16 +49,16 @@ public class RequestRestaurantFragment extends Fragment {
 		String provider = locationManager.getBestProvider(criteria, true);
 		android.location.Location location = locationManager
 				.getLastKnownLocation(provider);
-		System.out.println(location);
 
-		// TODO: emulate location with lat long
 		try {
-			this.locations= new SetupListTask(39.953616, -75.198584).execute().get();
+			// Set this location
+			RequestActivity reqActivity = (RequestActivity) getActivity();
+			double lat = reqActivity.getLocationLat();
+			double lon = reqActivity.getLocationLon();
+			this.locations= new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -105,8 +106,6 @@ public class RequestRestaurantFragment extends Fragment {
 
 			googleLocations = GooglePlacesAPI.getRestaurants(this.latitude,
 					this.longitude, DEFAULT_RADIUS);
-			System.out.println("googleLocations size: "
-					+ googleLocations.size());
 
 			return googleLocations;
 		};

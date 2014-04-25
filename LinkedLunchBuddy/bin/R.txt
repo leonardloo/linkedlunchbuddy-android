@@ -156,7 +156,7 @@ int drawable ic_whats_hot 0x7f020047
 int drawable list_item_bg_normal 0x7f020048
 int drawable list_item_bg_pressed 0x7f020049
 int drawable list_selector 0x7f02004a
-int id action_settings 0x7f05004b
+int id action_settings 0x7f05004c
 int id authButton 0x7f050010
 int id blurbText 0x7f050009
 int id blurbWelcome 0x7f050008
@@ -227,6 +227,7 @@ int id startDateInfo 0x7f05003f
 int id startHomeButton 0x7f050007
 int id startTimeButton 0x7f050046
 int id startTimeLabel 0x7f050044
+int id start_request 0x7f05004b
 int id submitRequestButton 0x7f050041
 int id terrain 0x7f050003
 int id textView1 0x7f05000a
@@ -264,6 +265,7 @@ int layout fragment_requestrestaurant 0x7f03001b
 int layout fragment_requestsubmit 0x7f03001c
 int layout fragment_requesttime 0x7f03001d
 int layout google_location_list_item 0x7f03001e
+int layout request_start_window 0x7f03001f
 int menu main 0x7f0b0000
 int string action_settings 0x7f060035
 int string app_id 0x7f060037
