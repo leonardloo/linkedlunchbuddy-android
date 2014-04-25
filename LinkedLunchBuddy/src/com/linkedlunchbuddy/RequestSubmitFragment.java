@@ -33,7 +33,7 @@ public class RequestSubmitFragment extends RequestTabFragment {
 	Date endTimeDate;
 
 	TextView endDateText;
-	RequestActivity activity;
+	RequestActivity activity = (RequestActivity) getActivity();
 	View rootView;
 
 	public RequestSubmitFragment() {
@@ -124,20 +124,30 @@ public class RequestSubmitFragment extends RequestTabFragment {
 	 */
 
 	public void updateData() {
+		activity = (RequestActivity) getActivity();
+		if (activity != null) {
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-		Long startTime = activity.getRequest().getStartTime();
-		Long endTime = activity.getRequest().getEndTime();
-
-		if (startTime == null || endTime == null) {
-			startTime = 0L;
-			endTime = 0L;
-		}
+		Long startTime = 0L;
+		Long endTime = 0L;
+		
+			if (activity.getRequest() != null) {
+				startTime = activity.getRequest().getStartTime();
+				endTime = activity.getRequest().getEndTime();
+				if (startTime == null || endTime == null) {
+					startTime = 0L;
+					endTime = 0L;
+				}
+			}
+		
 
 		startTimeDate = new Date(startTime * 1000L);
 		endTimeDate = new Date(endTime * 1000L);
 		String startTimeString = df.format(startTimeDate);
 		String endTimeString = df.format(endTimeDate);
+		
+		startDateText = (TextView) rootView.findViewById(R.id.startDateInfo);
+		endDateText = (TextView) rootView.findViewById(R.id.endDateInfo);
 		startDateText.setText("Start Date: " + startTimeString);
 		endDateText.setText("End Date: " + endTimeString);
 
@@ -145,13 +155,17 @@ public class RequestSubmitFragment extends RequestTabFragment {
 		TextView restaurantText = (TextView) rootView
 				.findViewById(R.id.listOfRestaurantsInfo);
 		List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
-		if(restaurants != null){
+		if (restaurants != null) {
 			for (GoogleLocation restaurant : restaurants) {
 				restaurantText.setText(restaurantText.getText() + "\n"
 						+ restaurant.getName());
 			}
 		}
-		
+		startDateText.invalidate();
+		endDateText.invalidate();
+		restaurantText.invalidate();
+		System.out.println("updateData called");
+	}
 	}
 
 	/**

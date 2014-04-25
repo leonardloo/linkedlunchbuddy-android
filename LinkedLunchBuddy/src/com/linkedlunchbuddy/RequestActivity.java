@@ -80,9 +80,9 @@ public class RequestActivity extends FragmentActivity {
 		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				
 				viewPager.setCurrentItem(tab.getPosition());
 				requestPagerAdapter.notifyDataSetChanged();
+
 			}
 
 			@Override
@@ -105,7 +105,6 @@ public class RequestActivity extends FragmentActivity {
 		actionBar.addTab(actionBar.newTab().setText("Submit")
 				.setTabListener(tabListener));
 
-
 		/*
 		 * if (savedInstanceState == null) { // Add the fragment on initial
 		 * activity setup requestTimeFragment = new RequestTimeFragment();
@@ -123,10 +122,9 @@ public class RequestActivity extends FragmentActivity {
 			super(fm);
 		}
 
-		
 		@Override
 		public Fragment getItem(int i) {
-			System.out.println("getItem called index: "+i);
+			System.out.println("getItem called index: " + i);
 			RequestTabFragment fragment = null;
 			switch (i) {
 			case 0:
@@ -141,6 +139,8 @@ public class RequestActivity extends FragmentActivity {
 			default:
 				break;
 			}
+
+			fragment.updateData();
 			return fragment;
 		}
 
