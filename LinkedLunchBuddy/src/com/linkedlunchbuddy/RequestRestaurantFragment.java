@@ -35,6 +35,9 @@ public class RequestRestaurantFragment extends Fragment {
 	private ArrayList<GoogleLocation> locations;
 	private TextView header;
 	
+	public RequestRestaurantFragment(){
+		
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -28,6 +28,10 @@ public class RequestSubmitFragment extends Fragment {
 
 	private Request requestResponse;
 	private LunchDate matchedLunchDate;
+	
+	public RequestSubmitFragment(){
+		
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,22 +45,22 @@ public class RequestSubmitFragment extends Fragment {
 		TextView endDateText = (TextView) rootView
 				.findViewById(R.id.endDateInfo);
 
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		Date startTime = new Date(activity.getRequest().getStartTime()*1000L);
-		Date endTime = new Date(activity.getRequest().getEndTime()*1000L);
-		String startTimeString = df.format(startTime);
-		String endTimeString = df.format(endTime);
-		startDateText.setText("Start Date: " + startTimeString);
-		endDateText.setText("End Date: " + endTimeString);
+//		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+//		Date startTime = new Date(activity.getRequest().getStartTime()*1000L);
+//		Date endTime = new Date(activity.getRequest().getEndTime()*1000L);
+//		String startTimeString = df.format(startTime);
+//		String endTimeString = df.format(endTime);
+//		startDateText.setText("Start Date: " + startTimeString);
+//		endDateText.setText("End Date: " + endTimeString);
 
 		// Get restaurants and display
-		TextView restaurantText = (TextView) rootView
-				.findViewById(R.id.listOfRestaurantsInfo);
-		List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
-		for (GoogleLocation restaurant : restaurants) {
-			restaurantText.setText(restaurantText.getText() + "\n"
-					+ restaurant.getName());
-		}
+//		TextView restaurantText = (TextView) rootView
+//				.findViewById(R.id.listOfRestaurantsInfo);
+//		List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
+//		for (GoogleLocation restaurant : restaurants) {
+//			restaurantText.setText(restaurantText.getText() + "\n"
+//					+ restaurant.getName());
+//		}
 
 		// Submit request button
 

@@ -37,7 +37,9 @@ public class RequestTimeFragment extends Fragment {
 	private int endHour = -1;
 	private int endMinute = -1;
 
-
+	public RequestTimeFragment(){
+		
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

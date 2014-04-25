@@ -70,7 +70,7 @@ public class RequestActivity extends FragmentActivity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-	
+				
 				viewPager.setCurrentItem(tab.getPosition());
 				
 			}
@@ -168,14 +168,17 @@ public class RequestActivity extends FragmentActivity {
 	    	Fragment fragment = null;
 	    	switch (i) {
 	    	case 0 : 
-	    		fragment = new RequestTimeFragment();
-	    		break;
+	    		//fragment = new RequestTimeFragment();
+	    		return new RequestTimeFragment();
+	    		
 	    	case 1:
-	    		fragment = new RequestRestaurantFragment();
-	    		break;
+	    		//fragment = new RequestRestaurantFragment();
+	    		return new RequestRestaurantFragment();
+	    		
 	    	case 2:
-	    		fragment = new RequestSubmitFragment();
-	    		break;
+	    		//fragment = new RequestSubmitFragment();
+	    		return new RequestSubmitFragment();
+	    		
 	    	default:
 	    		break;
 	    	}
