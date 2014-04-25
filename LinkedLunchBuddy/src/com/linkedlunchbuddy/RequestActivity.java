@@ -35,7 +35,8 @@ public class RequestActivity extends FragmentActivity {
 	private int endHour = -1;
 	private int endMinute = -1;
 
-	private List<GoogleLocation> selectedRestaurants;
+	public List<GoogleLocation> selectedRestaurants;
+	
 
 	RequestPagerAdapter requestPagerAdapter;
 	ViewPager viewPager;
@@ -45,6 +46,7 @@ public class RequestActivity extends FragmentActivity {
 
 		// Initialization of Request fields
 		currentRequest = new Request();
+		currentRequest.setRestaurantPreferences(new ArrayList<String>());
 		// Set user
 		dataHandler = new DataHandler(getBaseContext());
 		dataHandler.open();
@@ -184,15 +186,15 @@ public class RequestActivity extends FragmentActivity {
 		return this.currentRequest;
 	}
 
-	public void setSelectedRestaurants(List<GoogleLocation> selectedRestaurants) {
-		this.selectedRestaurants = selectedRestaurants;
-
+	public void setSelectedRestaurants() {
 		List<String> selectionsForRequest = new ArrayList<String>();
 		for (GoogleLocation location : selectedRestaurants) {
-			selectionsForRequest.add(location.getId());
+			if(location.isSelected()){
+				selectionsForRequest.add(location.getId());
+			}
+			
 		}
 		this.currentRequest.setRestaurantPreferences(selectionsForRequest);
-
 	}
 
 	public int getYear() {

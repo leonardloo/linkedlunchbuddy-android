@@ -60,44 +60,44 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 			double lat = reqActivity.getLocationLat();
 			double lon = reqActivity.getLocationLon();
 			// 39.95, -75.17
-			this.locations = new SetupListTask(lat, lon).execute().get();
+			reqActivity.selectedRestaurants = new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
 
-		Button confirmButton = (Button) rootView
-				.findViewById(R.id.doneWithRequestRestaurantButton);
-		confirmButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				List<GoogleLocation> selectedRestaurants = new ArrayList<GoogleLocation>();
-				for (GoogleLocation loc : locations) {
-					if (loc.isSelected()) {
-						selectedRestaurants.add(loc);
-					}
-				}
-				// SelectedRestaurants only contains the GooglePlace objects
-				// selected by user
-				RequestActivity activity = (RequestActivity) RequestRestaurantFragment.this
-						.getActivity();
-				activity.setSelectedRestaurants(selectedRestaurants);
-
-				// Move over to RequestSubmitFragment
-				/*
-				 * FragmentManager fragmentManager =
-				 * RequestRestaurantFragment.this
-				 * .getActivity().getSupportFragmentManager();
-				 * FragmentTransaction fragmentTransaction =
-				 * fragmentManager.beginTransaction();
-				 * fragmentTransaction.replace(R.id.request_frame_container, new
-				 * RequestSubmitFragment(), "Request Submit");
-				 * fragmentTransaction.commit();
-				 */
-			}
-		});
+//		Button confirmButton = (Button) rootView
+//				.findViewById(R.id.doneWithRequestRestaurantButton);
+//		confirmButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//
+//				List<GoogleLocation> selectedRestaurants = new ArrayList<GoogleLocation>();
+//				for (GoogleLocation loc : locations) {
+//					if (loc.isSelected()) {
+//						selectedRestaurants.add(loc);
+//					}
+//				}
+//				// SelectedRestaurants only contains the GooglePlace objects
+//				// selected by user
+//				RequestActivity activity = (RequestActivity) RequestRestaurantFragment.this
+//						.getActivity();
+//				activity.setSelectedRestaurants(selectedRestaurants);
+//
+//				// Move over to RequestSubmitFragment
+//				/*
+//				 * FragmentManager fragmentManager =
+//				 * RequestRestaurantFragment.this
+//				 * .getActivity().getSupportFragmentManager();
+//				 * FragmentTransaction fragmentTransaction =
+//				 * fragmentManager.beginTransaction();
+//				 * fragmentTransaction.replace(R.id.request_frame_container, new
+//				 * RequestSubmitFragment(), "Request Submit");
+//				 * fragmentTransaction.commit();
+//				 */
+//			}
+//		});
 		return rootView;
 
 	}
@@ -146,16 +146,18 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					GoogleLocation location = (GoogleLocation) listView
-							.getAdapter().getItem(position);
-					boolean selectedState = location.toggleSelected();
+					((GoogleLocation) listView
+					.getAdapter().getItem(position)).toggleSelected();
+//					GoogleLocation location = (GoogleLocation) listView
+//							.getAdapter().getItem(position);
+					//boolean selectedState = location.toggleSelected();
+					//System.out.println("selectedState: "+ selectedState);
+					
 					// TODO: Toggle listview item view to set and not set
 					// booleans
-					if (selectedState) {
+					
 						view.setActivated(true); 
-					} else {
-						view.setActivated(false);
-					}
+					
 					// Assemble List of Restaurant IDs
 					// TODO: Figure out how to highlight listView cell
 					// background upon selection

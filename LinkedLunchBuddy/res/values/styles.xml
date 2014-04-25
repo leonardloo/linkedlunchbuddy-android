@@ -36,7 +36,7 @@
     </style>
 
     <style name="LBButtonSmall" parent="@android:style/Widget.Button">
-        <item name="android:layout_margin">0dip</item>
+        <item name="android:layout_margin">5dip</item>
         <item name="android:background">@color/lightGrayTransluscent</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#FFFFFF</item>

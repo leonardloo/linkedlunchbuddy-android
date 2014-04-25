@@ -62,6 +62,9 @@ public class RequestSubmitFragment extends RequestTabFragment {
 			public void onClick(View v) {
 				// Launch AsyncTask
 				try {
+					RequestActivity reqActivity = ((RequestActivity) RequestSubmitFragment.this
+							.getActivity());
+					reqActivity.setSelectedRestaurants();
 					requestResponse = new createRequestTask(
 							((RequestActivity) RequestSubmitFragment.this
 									.getActivity()).getRequest()).execute()
@@ -144,7 +147,9 @@ public class RequestSubmitFragment extends RequestTabFragment {
 		endDateText = (TextView) rootView.findViewById(R.id.endDateInfo);
 		startDateText.setText("Start Date: " + startTimeString);
 		endDateText.setText("End Date: " + endTimeString);
-		
+		Request request = activity.getRequest();
+		request.setStartTime(startUnixTime);
+		request.setEndTime(endUnixTime);
 
 		// // Get restaurants and display
 		TextView restaurantText = (TextView) rootView
@@ -152,8 +157,11 @@ public class RequestSubmitFragment extends RequestTabFragment {
 		List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
 		if (restaurants != null) {
 			for (GoogleLocation restaurant : restaurants) {
-				restaurantText.setText(restaurantText.getText() + "\n"
-						+ restaurant.getName());
+				if(restaurant.isSelected()){
+					restaurantText.setText(restaurantText.getText() + "\n"
+							+ restaurant.getName());
+				}
+				
 			}
 		}
 		startDateText.invalidate();
@@ -177,6 +185,7 @@ public class RequestSubmitFragment extends RequestTabFragment {
 
 		public createRequestTask(Request request) {
 			this.request = request;
+			System.out.println("request send off with time: "+ request.getStartTime()+"--"+request.getEndTime());
 		}
 
 		protected Request doInBackground(Context... contexts) {
@@ -202,6 +211,7 @@ public class RequestSubmitFragment extends RequestTabFragment {
 
 		public FindMatchTask(Long requestId) {
 			this.requestId = requestId;
+			System.out.println("requestId at submission: "+requestId);
 		}
 
 		protected LunchDate doInBackground(Context... contexts) {

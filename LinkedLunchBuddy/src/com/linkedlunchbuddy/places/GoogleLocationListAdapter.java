@@ -25,7 +25,6 @@ public class GoogleLocationListAdapter extends ArrayAdapter<GoogleLocation> {
 		this.context = context;
 		this.layoutResourceId = resource;
 		this.data = objects;
-
 	}
 
 	@Override
