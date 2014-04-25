@@ -164,6 +164,7 @@ public class RequestActivity extends FragmentActivity {
 	}
 
 	public void setTime(long startTime, long endTime) {
+		System.out.println("setTime called in requestactivity");
 		this.currentRequest.setStartTime(startTime);
 		this.currentRequest.setEndTime(endTime);
 	}
