@@ -1,40 +1,31 @@
 package com.linkedlunchbuddy;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
 import com.linkedlunchbuddy.placesapi.GooglePlacesAPI;
 
-public class RequestRestaurantFragment extends Fragment {
+public class RequestRestaurantFragment extends RequestTabFragment {
 
 	public static final double DEFAULT_RADIUS = 1000;
 
-	private ArrayList<GoogleLocation> locations;
-	private TextView header;
-	
+
+	public RequestRestaurantFragment() {
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,40 +48,21 @@ public class RequestRestaurantFragment extends Fragment {
 			double lat = reqActivity.getLocationLat();
 			double lon = reqActivity.getLocationLon();
 			// 39.95, -75.17
-			this.locations= new SetupListTask(lat, lon).execute().get();
+			new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-
-		Button confirmButton = (Button) rootView
-				.findViewById(R.id.doneWithRequestRestaurantButton);
-		confirmButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				List<GoogleLocation> selectedRestaurants = new ArrayList<GoogleLocation>();
-				for (GoogleLocation loc : locations) {
-					if (loc.isSelected()) {
-						selectedRestaurants.add(loc);
-					}
-				}
-				// SelectedRestaurants only contains the GooglePlace objects
-				// selected by user
-				RequestActivity activity = (RequestActivity) RequestRestaurantFragment.this.getActivity();
-				activity.setSelectedRestaurants(selectedRestaurants);
-				
-				// Move over to RequestSubmitFragment
-				/*
-				FragmentManager fragmentManager = RequestRestaurantFragment.this.getActivity().getSupportFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.request_frame_container, new RequestSubmitFragment(), "Request Submit");
-				fragmentTransaction.commit();
-				*/
-			}
-		});
 		return rootView;
+
+	}
+
+	/*
+	 * RequestTabFragment inherited methods
+	 */
+
+	public void updateData() {
 
 	}
 
@@ -132,20 +104,19 @@ public class RequestRestaurantFragment extends Fragment {
 						int position, long id) {
 					GoogleLocation location = (GoogleLocation) listView
 							.getAdapter().getItem(position);
-					boolean selectedState = location.toggleSelected();
-					// TODO: Toggle listview item view to set and not set booleans
-					view.setActivated(true);
-					// Assemble List of Restaurant IDs
-					// TODO: Figure out how to highlight listView cell
-					// background upon selection
-					//view.setBackgroundColor(getResources().getColor(R.color.gray));
-					
-					/*parent.getChildAt(position).setBackgroundColor(
-							getResources().getColor(R.color.gray));*/
+					location.toggleSelected();
+					RequestActivity reqActivity = (RequestActivity)RequestRestaurantFragment.this.getActivity();
+					reqActivity.modifySelectedRestaurant(location);
+					if (location.isSelected()) {
+						view.setActivated(true);
+					} else {
+						view.setActivated(false);
+					}
 				}
 
 			});
 		};
 	}
+
 
 }

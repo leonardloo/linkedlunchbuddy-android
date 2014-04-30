@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/userendpoint/v1/20140425012432/java/1.16.0-rc/linkedlunchbuddy.com-userendpoint-v1-20140425012432-java-1.16.0-rc-sources.jar", 
-      "path": "linkedlunchbuddy.com-userendpoint-v1-20140425012432-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/userendpoint/v1/20140430020055/java/1.16.0-rc/linkedlunchbuddy.com-userendpoint-v1-20140430020055-java-1.16.0-rc-sources.jar", 
+      "path": "linkedlunchbuddy.com-userendpoint-v1-20140430020055-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-04-25 01:24"
+      "timestamp": "2014-04-30 02:00"
     }, 
     {
-      "path": "linkedlunchbuddy.com-userendpoint-v1-20140425012432-java-1.16.0-rc.jar.properties", 
+      "path": "linkedlunchbuddy.com-userendpoint-v1-20140430020055-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -701,5 +701,5 @@
   "version": "v1", 
   "language_version": "1.16.0-rc", 
   "id": "userendpoint:v1", 
-  "revision": 20140425012432
+  "revision": 20140430020055
 }

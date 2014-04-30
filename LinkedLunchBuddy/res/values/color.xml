@@ -12,5 +12,7 @@
     <color name="gray">#9d9ea0</color>
     <color name="darkGreen">#07d167</color>
     <color name="lightGreen">#30e2a6</color>
-
+    <color name="pennRed">#990000</color>
+    <color name="pennBlue">#011f5b</color>
+    <color name="pennBlueTransluscent">#88011f5b</color>    <color name="lightGrayTransluscent">#88cccccc</color>
 </resources>

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:theme="@style/RequestStyle">
 
     <TextView
         android:id="@+id/dateLabel"
@@ -25,7 +26,7 @@
 
     <Button
         android:id="@+id/dateButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/LBButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/dateLabel"
@@ -36,7 +37,7 @@
 
     <Button
         android:id="@+id/startTimeButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/LBButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/startTimeLabel"
@@ -55,22 +56,12 @@
 
     <Button
         android:id="@+id/endTimeButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/LBButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/endTimeLabel"
         android:layout_alignBottom="@+id/endTimeLabel"
         android:layout_alignLeft="@+id/dateButton"
         android:text="Set Time" />
-
-    <Button
-        android:id="@+id/doneWithRequestTimeButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/endTimeButton"
-        android:layout_marginTop="41dp"
-        android:padding="20dp"
-        android:text="Choose Restaurants >" />
 
 </RelativeLayout>
