@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/D1aiQtATLxjzQMFskQsYuVd6Z6Q\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/D1aiQtATLxjzQMFskQsYuVd6Z6Q\"",
  "discoveryVersion": "v1",
  "id": "lunchdateendpoint:v1",
  "name": "lunchdateendpoint",

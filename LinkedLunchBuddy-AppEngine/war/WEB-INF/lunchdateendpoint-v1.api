@@ -26,47 +26,6 @@
   "ownerDomain" : "linkedlunchbuddy.com",
   "ownerName" : "linkedlunchbuddy.com",
   "methods" : {
-    "lunchdateendpoint.listLunchDate" : {
-      "path" : "lunchdate",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.LunchDateEndpoint.listLunchDate",
-      "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "lunchdateendpoint.insertLunchDate" : {
-      "path" : "lunchdate",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.LunchDateEndpoint.insertLunchDate",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "lunchdateendpoint.updateLunchDate" : {
       "path" : "lunchdate",
       "httpMethod" : "PUT",
@@ -104,6 +63,47 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "lunchdateendpoint.insertLunchDate" : {
+      "path" : "lunchdate",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.LunchDateEndpoint.insertLunchDate",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "lunchdateendpoint.listLunchDate" : {
+      "path" : "lunchdate",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.LunchDateEndpoint.listLunchDate",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "lunchdateendpoint.removeLunchDate" : {
       "path" : "lunchdate/{id}",
       "httpMethod" : "DELETE",
@@ -128,21 +128,6 @@
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_LunchDate" : {
-        "id" : "CollectionResponse_LunchDate",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "LunchDate"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "LunchDate" : {
         "id" : "LunchDate",
         "type" : "object",
@@ -225,22 +210,24 @@
             "format" : "int64"
           }
         }
+      },
+      "CollectionResponse_LunchDate" : {
+        "id" : "CollectionResponse_LunchDate",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "LunchDate"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.linkedlunchbuddy.LunchDateEndpoint.listLunchDate" : {
-        "response" : {
-          "$ref" : "CollectionResponse_LunchDate"
-        }
-      },
-      "com.linkedlunchbuddy.LunchDateEndpoint.insertLunchDate" : {
-        "request" : {
-          "$ref" : "LunchDate"
-        },
-        "response" : {
-          "$ref" : "LunchDate"
-        }
-      },
       "com.linkedlunchbuddy.LunchDateEndpoint.updateLunchDate" : {
         "request" : {
           "$ref" : "LunchDate"
@@ -252,6 +239,19 @@
       "com.linkedlunchbuddy.LunchDateEndpoint.getLunchDate" : {
         "response" : {
           "$ref" : "LunchDate"
+        }
+      },
+      "com.linkedlunchbuddy.LunchDateEndpoint.insertLunchDate" : {
+        "request" : {
+          "$ref" : "LunchDate"
+        },
+        "response" : {
+          "$ref" : "LunchDate"
+        }
+      },
+      "com.linkedlunchbuddy.LunchDateEndpoint.listLunchDate" : {
+        "response" : {
+          "$ref" : "CollectionResponse_LunchDate"
         }
       },
       "com.linkedlunchbuddy.LunchDateEndpoint.removeLunchDate" : {

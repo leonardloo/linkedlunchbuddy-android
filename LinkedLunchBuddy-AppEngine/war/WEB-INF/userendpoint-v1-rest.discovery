@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"IneSQDZRISaU6plvxbhHIOAs-WY/Gi1kv0snYEz4Hj_j0bX00tBJSLY\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/Gi1kv0snYEz4Hj_j0bX00tBJSLY\"",
  "discoveryVersion": "v1",
  "id": "userendpoint:v1",
  "name": "userendpoint",

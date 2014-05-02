@@ -3,6 +3,7 @@ package com.linkedlunchbuddy;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +18,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appspot.linear_axle_547.requestcontroller.model.LunchDate;
+import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
 import com.linkedlunchbuddy.requestendpoint.model.Request;
 
@@ -132,22 +135,36 @@ public class RequestSubmitFragment extends RequestTabFragment {
 			request.setEndTime(endUnixTime);
 
 			// // Get restaurants and display
-			TextView restaurantText = (TextView) rootView
-					.findViewById(R.id.listOfRestaurantsInfo);
+//			TextView restaurantText = (TextView) rootView
+//					.findViewById(R.id.listOfRestaurantsInfo);
+			// Populate restaurants list view
+
 			List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
-			restaurantText.setText("");
+			List<String> restaurantIds = new ArrayList<String>();
+			List<GoogleLocation> displayedRestaurants = new ArrayList<GoogleLocation>();
+
+//			restaurantText.setText("");
 			if (restaurants != null) {
 				for (GoogleLocation restaurant : restaurants) {
 					if(restaurant.isSelected()){
-						restaurantText.setText(restaurantText.getText() + "\n"
-								+ restaurant.getName());
+//						restaurantText.setText(restaurantText.getText() + "\n"
+//								+ restaurant.getName());
+						displayedRestaurants.add(restaurant);
+						restaurantIds.add(restaurant.getId());
 					}
 
 				}
 			}
+			ListView restaurantsList = (ListView) rootView.findViewById(R.id.restaurantsListView);
+			GoogleLocationListAdapter adapter = new GoogleLocationListAdapter(
+					getActivity(), R.layout.google_location_list_item,
+					displayedRestaurants);
+			restaurantsList.setAdapter(adapter);
+			request.setRestaurantPreferences(restaurantIds);
+			
 			startDateText.invalidate();
 			endDateText.invalidate();
-			restaurantText.invalidate();
+//			restaurantText.invalidate();
 		}
 	}
 
