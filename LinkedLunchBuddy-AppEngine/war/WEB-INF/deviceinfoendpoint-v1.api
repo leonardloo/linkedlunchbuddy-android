@@ -26,6 +26,22 @@
   "ownerDomain" : "linkedlunchbuddy.com",
   "ownerName" : "linkedlunchbuddy.com",
   "methods" : {
+    "deviceinfoendpoint.insertDeviceInfo" : {
+      "path" : "deviceinfo",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.DeviceInfoEndpoint.insertDeviceInfo",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "deviceinfoendpoint.listDeviceInfo" : {
       "path" : "deviceinfo",
       "httpMethod" : "GET",
@@ -51,17 +67,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "deviceinfoendpoint.insertDeviceInfo" : {
-      "path" : "deviceinfo",
-      "httpMethod" : "POST",
+    "deviceinfoendpoint.getDeviceInfo" : {
+      "path" : "deviceinfo/{id}",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.DeviceInfoEndpoint.insertDeviceInfo",
+      "rosyMethod" : "com.linkedlunchbuddy.DeviceInfoEndpoint.getDeviceInfo",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -88,27 +109,6 @@
         "body" : "empty"
       }
     },
-    "deviceinfoendpoint.getDeviceInfo" : {
-      "path" : "deviceinfo/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.DeviceInfoEndpoint.getDeviceInfo",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "deviceinfoendpoint.updateDeviceInfo" : {
       "path" : "deviceinfo",
       "httpMethod" : "PUT",
@@ -128,21 +128,6 @@
   },
   "descriptor" : {
     "schemas" : {
-      "CollectionResponse_DeviceInfo" : {
-        "id" : "CollectionResponse_DeviceInfo",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "DeviceInfo"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
-      },
       "DeviceInfo" : {
         "id" : "DeviceInfo",
         "type" : "object",
@@ -158,14 +143,24 @@
             "format" : "int64"
           }
         }
+      },
+      "CollectionResponse_DeviceInfo" : {
+        "id" : "CollectionResponse_DeviceInfo",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DeviceInfo"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.linkedlunchbuddy.DeviceInfoEndpoint.listDeviceInfo" : {
-        "response" : {
-          "$ref" : "CollectionResponse_DeviceInfo"
-        }
-      },
       "com.linkedlunchbuddy.DeviceInfoEndpoint.insertDeviceInfo" : {
         "request" : {
           "$ref" : "DeviceInfo"
@@ -174,12 +169,17 @@
           "$ref" : "DeviceInfo"
         }
       },
-      "com.linkedlunchbuddy.DeviceInfoEndpoint.removeDeviceInfo" : {
+      "com.linkedlunchbuddy.DeviceInfoEndpoint.listDeviceInfo" : {
+        "response" : {
+          "$ref" : "CollectionResponse_DeviceInfo"
+        }
       },
       "com.linkedlunchbuddy.DeviceInfoEndpoint.getDeviceInfo" : {
         "response" : {
           "$ref" : "DeviceInfo"
         }
+      },
+      "com.linkedlunchbuddy.DeviceInfoEndpoint.removeDeviceInfo" : {
       },
       "com.linkedlunchbuddy.DeviceInfoEndpoint.updateDeviceInfo" : {
         "request" : {

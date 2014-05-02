@@ -26,27 +26,6 @@
   "ownerDomain" : "linkedlunchbuddy.com",
   "ownerName" : "linkedlunchbuddy.com",
   "methods" : {
-    "requestendpoint.getRequest" : {
-      "path" : "request/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.getRequest",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "requestendpoint.listRequest" : {
       "path" : "request",
       "httpMethod" : "GET",
@@ -70,6 +49,27 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "requestendpoint.removeRequest" : {
+      "path" : "request/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.removeRequest",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     },
     "requestendpoint.updateRequest" : {
@@ -104,14 +104,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "requestendpoint.removeRequest" : {
+    "requestendpoint.getRequest" : {
       "path" : "request/{id}",
-      "httpMethod" : "DELETE",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.removeRequest",
+      "rosyMethod" : "com.linkedlunchbuddy.RequestEndpoint.getRequest",
       "request" : {
         "parameters" : {
           "id" : {
@@ -122,12 +122,27 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_Request" : {
+        "id" : "CollectionResponse_Request",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Request"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "Request" : {
         "id" : "Request",
         "type" : "object",
@@ -163,33 +178,15 @@
             "type" : "string"
           }
         }
-      },
-      "CollectionResponse_Request" : {
-        "id" : "CollectionResponse_Request",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Request"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
-      "com.linkedlunchbuddy.RequestEndpoint.getRequest" : {
-        "response" : {
-          "$ref" : "Request"
-        }
-      },
       "com.linkedlunchbuddy.RequestEndpoint.listRequest" : {
         "response" : {
           "$ref" : "CollectionResponse_Request"
         }
+      },
+      "com.linkedlunchbuddy.RequestEndpoint.removeRequest" : {
       },
       "com.linkedlunchbuddy.RequestEndpoint.updateRequest" : {
         "request" : {
@@ -207,7 +204,10 @@
           "$ref" : "Request"
         }
       },
-      "com.linkedlunchbuddy.RequestEndpoint.removeRequest" : {
+      "com.linkedlunchbuddy.RequestEndpoint.getRequest" : {
+        "response" : {
+          "$ref" : "Request"
+        }
       }
     }
   }
