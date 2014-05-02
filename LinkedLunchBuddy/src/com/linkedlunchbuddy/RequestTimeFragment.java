@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class RequestTimeFragment extends RequestTabFragment {
+public class RequestTimeFragment extends Fragment {
 
 	private Calendar cal = Calendar.getInstance();
 	private TimePickerDialog.OnTimeSetListener stpd, etpd;
@@ -28,7 +29,6 @@ public class RequestTimeFragment extends RequestTabFragment {
 	private TextView startTimeLabel, endTimeLabel, dateLabel;
 
 	private RequestActivity activity;
-
 
 	public RequestTimeFragment() {
 
@@ -41,11 +41,9 @@ public class RequestTimeFragment extends RequestTabFragment {
 		// View rootView = inflater.inflate(R.layout.fragment_requesttime,
 		// container,
 		// false);
-		
 
-//		startTime = activity.getRequest().getStartTime();
-//		endTime = activity.getRequest().getEndTime();
-
+		// startTime = activity.getRequest().getStartTime();
+		// endTime = activity.getRequest().getEndTime();
 
 		// Load the theme
 		Context newContext = new ContextThemeWrapper(getActivity(),
@@ -54,15 +52,13 @@ public class RequestTimeFragment extends RequestTabFragment {
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		View rootView = newInflater.inflate(R.layout.fragment_requesttime,
 				container, false);
-		
+
 		activity = (RequestActivity) getActivity();
 
 		startTimeLabel = (TextView) rootView.findViewById(R.id.startTimeLabel);
 		endTimeLabel = (TextView) rootView.findViewById(R.id.endTimeLabel);
 		dateLabel = (TextView) rootView.findViewById(R.id.dateLabel);
 
-
-		
 		int year = activity.getYear();
 		int month = activity.getMonth();
 		int day = activity.getDay();
@@ -116,13 +112,13 @@ public class RequestTimeFragment extends RequestTabFragment {
 								endMinute));
 			}
 		}
-		
+
 		if (year != -1 && month != -1 && day != -1) {
 			dateLabel.setText("Date: "
 					+ new StringBuilder().append(year + "/")
 							.append(month + "/").append(day));
 		}
-		
+
 		Button dateButton = (Button) rootView.findViewById(R.id.dateButton);
 		dateButton.setOnClickListener(new OnClickListener() {
 
@@ -218,18 +214,7 @@ public class RequestTimeFragment extends RequestTabFragment {
 			}
 		};
 
-
 		return rootView;
-	}
-
-
-
-	/*
-	 * RequestTabFragment inherited methods
-	 */
-
-	public void updateData() {
-
 	}
 
 }

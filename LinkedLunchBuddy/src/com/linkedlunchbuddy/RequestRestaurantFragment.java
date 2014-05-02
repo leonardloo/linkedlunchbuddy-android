@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,9 @@ import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
 import com.linkedlunchbuddy.placesapi.GooglePlacesAPI;
 
-public class RequestRestaurantFragment extends RequestTabFragment {
+public class RequestRestaurantFragment extends Fragment{
 
 	public static final double DEFAULT_RADIUS = 1000;
-
 
 	public RequestRestaurantFragment() {
 
@@ -32,22 +32,11 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_requestrestaurant,
 				container, false);
-		RequestActivity activity = (RequestActivity) getActivity();
-		// Get Location
-		LocationManager locationManager = (LocationManager) activity
-				.getSystemService(Context.LOCATION_SERVICE);
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-		String provider = locationManager.getBestProvider(criteria, true);
-		android.location.Location location = locationManager
-				.getLastKnownLocation(provider);
-
 		try {
 			// Set this location
 			RequestActivity reqActivity = (RequestActivity) getActivity();
 			double lat = reqActivity.getLocationLat();
 			double lon = reqActivity.getLocationLon();
-			// 39.95, -75.17
 			new SetupListTask(lat, lon).execute().get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -61,10 +50,6 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 	/*
 	 * RequestTabFragment inherited methods
 	 */
-
-	public void updateData() {
-
-	}
 
 	class SetupListTask extends
 			AsyncTask<Void, Void, ArrayList<GoogleLocation>> {
@@ -105,7 +90,8 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 					GoogleLocation location = (GoogleLocation) listView
 							.getAdapter().getItem(position);
 					location.toggleSelected();
-					RequestActivity reqActivity = (RequestActivity)RequestRestaurantFragment.this.getActivity();
+					RequestActivity reqActivity = (RequestActivity) RequestRestaurantFragment.this
+							.getActivity();
 					reqActivity.modifySelectedRestaurant(location);
 					if (location.isSelected()) {
 						view.setActivated(true);
@@ -117,6 +103,5 @@ public class RequestRestaurantFragment extends RequestTabFragment {
 			});
 		};
 	}
-
 
 }

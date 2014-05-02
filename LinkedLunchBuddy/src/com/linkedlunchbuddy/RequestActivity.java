@@ -22,7 +22,7 @@ public class RequestActivity extends FragmentActivity {
 
 	private DataHandler dataHandler;
 
-	// Immediately launches RequestTimeFragment
+	// Request information maintained during here as user builds request
 	private Request currentRequest;
 	private double locationLat;
 	private double locationLon;
@@ -36,7 +36,6 @@ public class RequestActivity extends FragmentActivity {
 
 	private List<GoogleLocation> selectedRestaurants;
 
-
 	RequestPagerAdapter requestPagerAdapter;
 	ViewPager viewPager;
 	RequestTimeFragment timeFragment = new RequestTimeFragment();
@@ -47,34 +46,35 @@ public class RequestActivity extends FragmentActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 
 		super.onSaveInstanceState(outState);
-		getSupportFragmentManager()
-		.putFragment(outState, "RequestTimeFragment", timeFragment);
-		getSupportFragmentManager()
-		.putFragment(outState, "RequestRestaurantFragment", restaurantFragment);
-		getSupportFragmentManager()
-		.putFragment(outState, "RequestSubmitFragment", submitFragment);
+		getSupportFragmentManager().putFragment(outState,
+				"RequestTimeFragment", timeFragment);
+		getSupportFragmentManager().putFragment(outState,
+				"RequestRestaurantFragment", restaurantFragment);
+		getSupportFragmentManager().putFragment(outState,
+				"RequestSubmitFragment", submitFragment);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_request);
 
 		if (savedInstanceState != null) {
-			timeFragment = (RequestTimeFragment) getSupportFragmentManager().getFragment(
-					savedInstanceState, "RequestTimeFragment");
-			restaurantFragment = (RequestRestaurantFragment) getSupportFragmentManager().getFragment(
-					savedInstanceState, "RequestRestaurantFragment");
-			submitFragment = (RequestSubmitFragment) getSupportFragmentManager().getFragment(
-					savedInstanceState, "RequestSubmitFragment");
+			timeFragment = (RequestTimeFragment) getSupportFragmentManager()
+					.getFragment(savedInstanceState, "RequestTimeFragment");
+			restaurantFragment = (RequestRestaurantFragment) getSupportFragmentManager()
+					.getFragment(savedInstanceState,
+							"RequestRestaurantFragment");
+			submitFragment = (RequestSubmitFragment) getSupportFragmentManager()
+					.getFragment(savedInstanceState, "RequestSubmitFragment");
 
 		} else {
 			timeFragment = new RequestTimeFragment();
 			restaurantFragment = new RequestRestaurantFragment();
 			submitFragment = new RequestSubmitFragment();
 		}
-		
+
 		// Initialization of Request fields
 		currentRequest = new Request();
 		currentRequest.setRestaurantPreferences(new ArrayList<String>());
@@ -104,17 +104,18 @@ public class RequestActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.requestPager);
 		viewPager.setAdapter(requestPagerAdapter);
 		viewPager
-		.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				// Update data has to happen here
-				if (position == 2) {
-					RequestSubmitFragment submitFragment = (RequestSubmitFragment)requestPagerAdapter.getItem(position);
-					submitFragment.updateData();
-				}
-				getActionBar().setSelectedNavigationItem(position);
-			}
-		});
+				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+					@Override
+					public void onPageSelected(int position) {
+						// Update data has to happen here
+						if (position == 2) {
+							RequestSubmitFragment submitFragment = (RequestSubmitFragment) requestPagerAdapter
+									.getItem(position);
+							submitFragment.updateData();
+						}
+						getActionBar().setSelectedNavigationItem(position);
+					}
+				});
 
 		// Actions bars for swipes
 		final ActionBar actionBar = getActionBar();
@@ -156,7 +157,7 @@ public class RequestActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int i) {
-			RequestTabFragment fragment = null;
+			Fragment fragment = null;
 			// Don't create new fragments!
 			switch (i) {
 			case 0:
@@ -178,7 +179,6 @@ public class RequestActivity extends FragmentActivity {
 		public int getCount() {
 			return 3;
 		}
-
 
 	}
 
@@ -275,6 +275,5 @@ public class RequestActivity extends FragmentActivity {
 	public void setEndMinute(int endMinute) {
 		this.endMinute = endMinute;
 	}
-
 
 }
