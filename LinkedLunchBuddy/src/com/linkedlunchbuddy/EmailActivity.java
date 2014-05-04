@@ -1,6 +1,8 @@
 package com.linkedlunchbuddy;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -60,7 +62,9 @@ public class EmailActivity extends Activity {
 					dataHandler = new DataHandler(getBaseContext());
 					dataHandler.open();
 					dataHandler.insertUser(fbid, emailString, fbfirstname,
-							fblastname, fbgender);
+							fblastname, fbgender, (new LunchDateStatus(
+									LunchDateStatus.STATUS_DEFAULT, "", "", new ArrayList<Map<String, String>>())).
+									toJSON().toString());
 					
 					User createUser = new User().setEduEmail(emailString)
 							.setName(fbfirstname + " " + fblastname)

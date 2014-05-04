@@ -1,6 +1,7 @@
 package com.linkedlunchbuddy;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -275,5 +276,7 @@ public class RequestActivity extends FragmentActivity {
 	public void setEndMinute(int endMinute) {
 		this.endMinute = endMinute;
 	}
+	
+
 
 }

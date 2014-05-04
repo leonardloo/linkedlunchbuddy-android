@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class RequestTimeFragment extends Fragment {
 
@@ -29,22 +30,11 @@ public class RequestTimeFragment extends Fragment {
 	private TextView startTimeLabel, endTimeLabel, dateLabel;
 
 	private RequestActivity activity;
-
-	public RequestTimeFragment() {
-
-	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		// View rootView = inflater.inflate(R.layout.fragment_requesttime,
-		// container,
-		// false);
-
-		// startTime = activity.getRequest().getStartTime();
-		// endTime = activity.getRequest().getEndTime();
-
+		
 		// Load the theme
 		Context newContext = new ContextThemeWrapper(getActivity(),
 				R.style.RequestStyle);
@@ -216,5 +206,6 @@ public class RequestTimeFragment extends Fragment {
 
 		return rootView;
 	}
+	
 
 }

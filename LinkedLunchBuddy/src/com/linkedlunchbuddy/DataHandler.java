@@ -14,10 +14,11 @@ public class DataHandler {
 	public static final String FIRSTNAME = "firstname";
 	public static final String LASTNAME = "lastname";
 	public static final String GENDER = "gender";
+	public static final String LUNCHDATESTATUS = "lunchdatestatus";
 	public static final String TABLE_NAME = "mytable";
 	public static final String DATABASE_NAME = "mydatabase";
 	public static final int DATABASE_VERSION = 1;
-	public static final String DATABASE_CREATE = "create table mytable (fbid text not null, email text not null, firstname text not null, lastname text not null, gender text not null);";
+	public static final String DATABASE_CREATE = "create table mytable (fbid text not null, email text not null, firstname text not null, lastname text not null, gender text not null, lunchdatestatus text not null);";
 	
 
 	DatabaseHelper dbHelper;
@@ -61,7 +62,7 @@ public class DataHandler {
 		dbHelper.close();
 	}
 
-	public long insertUser(String fbid, String email, String firstname, String lastname, String gender) {
+	public long insertUser(String fbid, String email, String firstname, String lastname, String gender, String lunchdatestatus) {
 		// Do not insert if user already exists
 		if (!containsUserWithEmail(email)) {
 			ContentValues content = new ContentValues();
@@ -70,6 +71,7 @@ public class DataHandler {
 			content.put(FIRSTNAME, firstname);
 			content.put(LASTNAME, lastname);
 			content.put(GENDER, gender);
+			content.put(LUNCHDATESTATUS, lunchdatestatus);
 			return db.insert(TABLE_NAME, null, content);
 		}
 		return 0;
@@ -84,6 +86,7 @@ public class DataHandler {
 		content.put(FIRSTNAME, firstname);
 		content.put(LASTNAME, lastname);
 		content.put(GENDER, cursor.getString(4));
+		content.put(LUNCHDATESTATUS, cursor.getString(5));
 		cursor.close();
 		db.delete(TABLE_NAME, null, null);
 		return db.insert(TABLE_NAME, null, content);
@@ -101,9 +104,25 @@ public class DataHandler {
 		return false;
 	}
 	
+	// Called in RequestSubmitFragment to update LUNCHDATESTATUS
+	public long updateLunchDateStatus(String lunchDateStatus) {
+		ContentValues content = new ContentValues();
+		Cursor cursor = this.allUsers();
+		cursor.moveToFirst();
+		content.put(FBID, cursor.getString(0));
+		content.put(EMAIL, cursor.getString(1));
+		content.put(FIRSTNAME, cursor.getString(2));
+		content.put(LASTNAME, cursor.getString(3));
+		content.put(GENDER, cursor.getString(4));
+		content.put(LUNCHDATESTATUS, lunchDateStatus);
+		cursor.close();
+		db.delete(TABLE_NAME, null, null);
+		return db.insert(TABLE_NAME, null, content);
+	}
+	
 
 	public Cursor allUsers() {
-		return db.query(TABLE_NAME, new String[] {FBID, EMAIL,FIRSTNAME,LASTNAME,GENDER}, null, null, null, null, null);
+		return db.query(TABLE_NAME, new String[] {FBID, EMAIL,FIRSTNAME,LASTNAME,GENDER,LUNCHDATESTATUS}, null, null, null, null, null);
 	}
 
 }
