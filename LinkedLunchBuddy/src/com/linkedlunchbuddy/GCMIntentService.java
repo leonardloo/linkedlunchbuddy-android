@@ -130,6 +130,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	public void onMessage(Context context, Intent intent) {
 		// TODO: Intent to update LunchDateStatus
+		System.out.println(intent.getStringExtra("message"));
 		/*
     sendNotificationIntent(
         context,

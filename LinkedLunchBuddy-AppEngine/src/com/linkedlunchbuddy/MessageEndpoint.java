@@ -157,7 +157,7 @@ public class MessageEndpoint {
    *            the registration id of the device.
    * @return Result the result of the ping.
    */
-  private static Result doSendViaGcm(String message, Sender sender,
+  public static Result doSendViaGcm(String message, Sender sender,
       DeviceInfo deviceInfo) throws IOException {
     // Trim message if needed.
     if (message.length() > 1000) {

@@ -1,5 +1,6 @@
 package com.linkedlunchbuddy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +10,8 @@ import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.Named;
@@ -20,8 +23,10 @@ import com.google.appengine.datanucleus.query.JPACursorHelper;
 @Api(name = "requestcontroller", version = "v1", description = "our endpoint for matching requests")
 public class RequestController {
 
+	private static final String API_KEY = "AIzaSyBzZz7QzXWYVKSsn4TAeaFUXg4XE0RCJ_Y";
 
-	
+	private static final DeviceInfoEndpoint deviceInfoEndpoint = new DeviceInfoEndpoint();
+
 	// given a request from a client application, determine a possible LunchDate
 	// matching this request with other requests in the request pool
 	@ApiMethod(name = "listRequests", httpMethod = HttpMethod.GET)
@@ -30,10 +35,10 @@ public class RequestController {
 		// iterate over request pool and find best match
 		CollectionResponse<Request> listResp = listRequest("", null);
 		requestPool = listResp.getItems();
-		
+
 		return requestPool;
 	}
-	
+
 	// given a request from a client application, determine a possible LunchDate
 	// matching this request with other requests in the request pool
 	@ApiMethod(name = "findMatch", httpMethod = HttpMethod.GET)
@@ -42,23 +47,59 @@ public class RequestController {
 		// iterate over request pool and find best match
 		CollectionResponse<Request> listResp = listRequest("", null);
 		Collection<Request> requestPool = listResp.getItems();
-		
+
 		EntityManager mgr = getEntityManager();
-		
+
 		Request request = null;
 		try {
 			request = mgr.find(Request.class, requestId);
 		} finally {
 			mgr.close();
 		}
-		
+
 		result = MatchingAlgorithm.findMatch(request, requestPool);
+		notifyUserB(result);
 		return result;
 	}
 
 	/*
 	 * Helper Methods to interface with datastore
 	 */
+
+	private static void notifyUserB(LunchDate date) {
+		EntityManager mgr = getEntityManager();
+		User userB = mgr.find(User.class, date.getRequestB().getUserId());
+		User userA = mgr.find(User.class, date.getRequestA().getUserId());
+		DeviceInfo userBInfo = deviceInfoEndpoint.getDeviceInfo(userB
+				.getDeviceRegistrationId());
+		// create a MessageData entity with a timestamp of when it was
+		// received, and persist it
+		// TODO: change to actual restaurant name
+		Message message = new Message.Builder()
+		.addData("partnerName", userA.getName())
+		.addData("restaurant", date.getRestaurantId().toString())
+		.addData(
+				"startTime",
+				String.valueOf(date.getMatchedInterval().getStartTime()))
+				.addData("endTime",
+						String.valueOf(date.getMatchedInterval().getEndTime()))
+						.build();
+
+		// persist message if desired TODO: check if this is necessary
+		/*
+		 * MessageData messageObj = new MessageData();
+		 * messageObj.setMessage(message.toString());
+		 * messageObj.setTimestamp(System.currentTimeMillis()); try {
+		 * mgr.persist(messageObj); } finally { mgr.close(); }
+		 */
+
+		try {
+			MessageEndpoint.doSendViaGcm(message.toString(),
+					new Sender(API_KEY), userBInfo);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	// accessor method for persistence manager
 	private static EntityManager getEntityManager() {
