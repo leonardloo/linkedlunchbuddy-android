@@ -163,7 +163,6 @@ public class MessageEndpoint {
     if (message.length() > 1000) {
       message = message.substring(0, 1000) + "[...]";
     }
-
     // This message object is a Google Cloud Messaging object, it is NOT 
     // related to the MessageData class
     Message msg = new Message.Builder().addData("message", message).build();

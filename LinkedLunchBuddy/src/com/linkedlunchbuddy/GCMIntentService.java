@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -129,6 +130,26 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
+		// Update Core Data and call HomeFragment
+		DataHandler dataHandler = new DataHandler(getApplicationContext());
+		dataHandler.open();
+		String message = intent.getStringExtra("message");
+		String[] name1 = message.split("partnerName=");
+		String[] name2 = name1[1].split(",");
+		Map<String, String> restaurant = new HashMap<String, String>();
+		restaurant.put("lat", "39");
+		restaurant.put("lng","-75");
+		restaurant.put("name","yo");
+		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		list.add(restaurant);
+		dataHandler.updateLunchDateStatus(new LunchDateStatus(
+					LunchDateStatus.STATUS_MATCHED, name2[0], "email", list).
+					toJSON().toString());
+		
+		dataHandler.close();
+		Intent homeIntent = new Intent(this, HomeActivity.class);
+		startActivity(homeIntent);
+		
 		// TODO: Intent to update LunchDateStatus
 		System.out.println(intent.getStringExtra("message"));
 		/*

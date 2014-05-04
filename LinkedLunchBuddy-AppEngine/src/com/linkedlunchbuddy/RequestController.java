@@ -26,6 +26,7 @@ public class RequestController {
 	private static final String API_KEY = "AIzaSyBzZz7QzXWYVKSsn4TAeaFUXg4XE0RCJ_Y";
 
 	private static final DeviceInfoEndpoint deviceInfoEndpoint = new DeviceInfoEndpoint();
+	private static final MessageEndpoint messageEndpoint = new MessageEndpoint();
 
 	// given a request from a client application, determine a possible LunchDate
 	// matching this request with other requests in the request pool
@@ -70,8 +71,16 @@ public class RequestController {
 		EntityManager mgr = getEntityManager();
 		User userB = mgr.find(User.class, date.getRequestB().getUserId());
 		User userA = mgr.find(User.class, date.getRequestA().getUserId());
-		DeviceInfo userBInfo = deviceInfoEndpoint.getDeviceInfo(userB
-				.getDeviceRegistrationId());
+		DeviceInfo userBInfo = new DeviceInfo();
+
+	    CollectionResponse<DeviceInfo> response = deviceInfoEndpoint.listDeviceInfo(null,
+	            10);
+	    for (DeviceInfo deviceInfo : response.getItems()) {
+	    	if (deviceInfo.getDeviceRegistrationID().equals(userB.getDeviceRegistrationId())) {
+	    	userBInfo = deviceInfo;
+	      }
+	    }
+		
 		// create a MessageData entity with a timestamp of when it was
 		// received, and persist it
 		// TODO: change to actual restaurant name
@@ -92,10 +101,12 @@ public class RequestController {
 		 * messageObj.setTimestamp(System.currentTimeMillis()); try {
 		 * mgr.persist(messageObj); } finally { mgr.close(); }
 		 */
-
+		
 		try {
+			Sender sender = new Sender(API_KEY);
+//			messageEndpoint.sendMessage(message.toString());
 			MessageEndpoint.doSendViaGcm(message.toString(),
-					new Sender(API_KEY), userBInfo);
+					sender, userBInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
