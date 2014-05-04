@@ -30,7 +30,7 @@ public class EmailActivity extends Activity {
 	private static final String TAG = "EmailActivity";
 	private UiLifecycleHelper uiHelper;
 	private Session session = Session.getActiveSession();
-	private DataHandler dataHandler;
+	
 	private EditText emailField;
 	private String fbid;
 	private String fbfirstname;
@@ -40,6 +40,7 @@ public class EmailActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_email);
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
@@ -59,31 +60,10 @@ public class EmailActivity extends Activity {
 							"Please provide a valid .edu email",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					dataHandler = new DataHandler(getBaseContext());
-					dataHandler.open();
-					dataHandler.insertUser(fbid, emailString, fbfirstname,
-							fblastname, fbgender, (new LunchDateStatus(
-									LunchDateStatus.STATUS_DEFAULT, "", "", new ArrayList<Map<String, String>>())).
-									toJSON().toString());
-					
-					User createUser = new User().setEduEmail(emailString)
-							.setName(fbfirstname + " " + fblastname)
-							.setGender(fbgender).setFbId(fbid);
-
-					// Async task endpoint
-					try {
-						User createdUser = new CreateUserTask(createUser)
-								.execute().get();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					GCMIntentService.register(getApplicationContext(), fbid, fbfirstname, fblastname, fbgender, emailString);
 					Intent intent = new Intent(getApplicationContext(),
 							BlurbActivity.class);
-					dataHandler.close();
+
 					startActivity(intent);
 
 				}
@@ -165,34 +145,4 @@ public class EmailActivity extends Activity {
 		uiHelper.onSaveInstanceState(outState);
 	}
 
-	/**
-	 * CREATE A USER WITH THE USERENDPOINT BUILDER
-	 * 
-	 * @author blotter
-	 * @param User
-	 *            Object to be persisted in updated form
-	 * @return Updated User Object
-	 */
-	public class CreateUserTask extends AsyncTask<Context, Void, User> {
-
-		private User createUser;
-
-		public CreateUserTask(User user) {
-			this.createUser = user;
-		}
-
-		protected User doInBackground(Context... contexts) {
-
-			User createdUser = null;
-			try {
-
-				createdUser = EndpointController.getUserEndpoint()
-						.insertUser(this.createUser).execute();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return createdUser;
-		}
-	}
 }

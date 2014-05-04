@@ -1,5 +1,6 @@
 package com.linkedlunchbuddy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,11 +52,13 @@ public class HomeFragment extends Fragment {
 		dataHandler.open();
 		Cursor cursor = dataHandler.allUsers();
 		cursor.moveToFirst();
+
 		gender = cursor.getString(4);
 		try {
 
 			googleMap = ((MapFragment) getFragmentManager().findFragmentById(
 					R.id.map)).getMap();
+			//System.out.println(cursor.getString(5));
 			JSONObject lunchDateObject = new JSONObject(cursor.getString(5));
 			LunchDateStatus lunchDateStatus = new LunchDateStatus(lunchDateObject);
 			String status = lunchDateStatus.getStatus();
@@ -126,6 +129,7 @@ public class HomeFragment extends Fragment {
 			} 
 
 			// Either no match found or request not yet sent
+			// Slightly bugged: Sometimes have to check cursor directly
 			else if (status.equals(LunchDateStatus.STATUS_REQUESTEXPIRED) || 
 					status.equals(LunchDateStatus.STATUS_DEFAULT)) {
 
@@ -171,7 +175,9 @@ public class HomeFragment extends Fragment {
 				setCurrentLocation();
 
 				// Set status back to default
-				dataHandler.updateLunchDateStatus(LunchDateStatus.STATUS_DEFAULT);
+				dataHandler.updateLunchDateStatus(new LunchDateStatus(
+					LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>()).
+					toJSON().toString());
 
 			} 
 
