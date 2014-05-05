@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/D1aiQtATLxjzQMFskQsYuVd6Z6Q\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/Rtjq8b3oTsIUlIiSaN-ihwrxWx8\"",
  "discoveryVersion": "v1",
  "id": "lunchdateendpoint:v1",
  "name": "lunchdateendpoint",
@@ -86,6 +86,10 @@
     }
    }
   },
+  "JsonMap": {
+   "id": "JsonMap",
+   "type": "object"
+  },
   "LunchDate": {
    "id": "LunchDate",
    "type": "object",
@@ -110,8 +114,8 @@
     "requestB": {
      "$ref": "Request"
     },
-    "restaurantId": {
-     "type": "string"
+    "venue": {
+     "$ref": "JsonMap"
     }
    }
   },
@@ -138,7 +142,7 @@
     "restaurantPreferences": {
      "type": "array",
      "items": {
-      "type": "string"
+      "$ref": "JsonMap"
      }
     },
     "startTime": {

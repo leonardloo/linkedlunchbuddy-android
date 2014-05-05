@@ -2,18 +2,23 @@ package com.linkedlunchbuddy;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import org.json.JSONObject;
-
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
@@ -134,8 +139,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 		DataHandler dataHandler = new DataHandler(getApplicationContext());
 		dataHandler.open();
 		String message = intent.getStringExtra("message");
-		String[] name1 = message.split("partnerName=");
-		String[] name2 = name1[1].split(",");
+		System.out.println(message);
+		// Parse message
+		String name = message.split("partnerName=")[1].split(",")[0];
+		String email = message.split("partnerEmail=")[1].split(",")[0];
+		// Build time from long unix
+		String timeInLong = message.split("time=")[1].split(",")[0];
+		Date date = new Date(Long.parseLong(timeInLong));
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		String time = df.format(date);
+		
 		Map<String, String> restaurant = new HashMap<String, String>();
 		restaurant.put("lat", "39");
 		restaurant.put("lng","-75");
@@ -143,21 +156,28 @@ public class GCMIntentService extends GCMBaseIntentService {
 		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		list.add(restaurant);
 		dataHandler.updateLunchDateStatus(new LunchDateStatus(
-					LunchDateStatus.STATUS_MATCHED, name2[0], "email", list).
+					LunchDateStatus.STATUS_MATCHED, name, email, list).
 					toJSON().toString());
 		
 		dataHandler.close();
-		Intent homeIntent = new Intent(this, HomeActivity.class);
-		startActivity(homeIntent);
 		
-		// TODO: Intent to update LunchDateStatus
-		System.out.println(intent.getStringExtra("message"));
-		/*
-    sendNotificationIntent(
-        context,
-        "Message received via Google Cloud Messaging:\n\n"
-            + intent.getStringExtra("message"), true, false);*/
+		 Intent homeIntent = new Intent(this, HomeActivity.class);
+		    PendingIntent pIntent = PendingIntent.getActivity(this, 0, homeIntent, 0);
+
+		    // Build notification
+		    // Actions are just fake
+		    Notification notification = new Notification.Builder(this)
+		        .setContentTitle("You have a LunchBuddy: " + name)
+		        .setContentText("You have been matched with " + name + " at " + list.get(0)  + " at " + time)
+		        .setContentIntent(pIntent).build();
+		    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		    // hide the notification after its selected
+		    notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+		    notificationManager.notify(0, notification);
+
 	}
+
 
 	/**
 	 * Called back when a registration token has been received from the Google

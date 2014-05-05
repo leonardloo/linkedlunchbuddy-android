@@ -142,8 +142,8 @@
           "requestB" : {
             "$ref" : "Request"
           },
-          "restaurantId" : {
-            "type" : "string"
+          "venue" : {
+            "$ref" : "JsonMap"
           },
           "matchedInterval" : {
             "$ref" : "TimeInterval"
@@ -179,7 +179,7 @@
           "restaurantPreferences" : {
             "type" : "array",
             "items" : {
-              "type" : "string"
+              "$ref" : "JsonMap"
             }
           },
           "lat" : {
@@ -192,6 +192,10 @@
             "type" : "string"
           }
         }
+      },
+      "JsonMap" : {
+        "id" : "JsonMap",
+        "type" : "object"
       },
       "TimeInterval" : {
         "id" : "TimeInterval",

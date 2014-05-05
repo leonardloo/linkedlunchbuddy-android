@@ -3,7 +3,6 @@ package com.linkedlunchbuddy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -14,11 +13,12 @@ import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
+import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @Api(name = "requestcontroller", version = "v1", description = "our endpoint for matching requests")
 public class RequestController {
@@ -73,26 +73,25 @@ public class RequestController {
 		User userA = mgr.find(User.class, date.getRequestA().getUserId());
 		DeviceInfo userBInfo = new DeviceInfo();
 
-	    CollectionResponse<DeviceInfo> response = deviceInfoEndpoint.listDeviceInfo(null,
-	            10);
-	    for (DeviceInfo deviceInfo : response.getItems()) {
-	    	if (deviceInfo.getDeviceRegistrationID().equals(userB.getDeviceRegistrationId())) {
-	    	userBInfo = deviceInfo;
-	      }
-	    }
-		
+		CollectionResponse<DeviceInfo> response = deviceInfoEndpoint.listDeviceInfo(null,
+				10);
+		for (DeviceInfo deviceInfo : response.getItems()) {
+			if (deviceInfo.getDeviceRegistrationID().equals(userB.getDeviceRegistrationId())) {
+				userBInfo = deviceInfo;
+			}
+		}
+
 		// create a MessageData entity with a timestamp of when it was
 		// received, and persist it
 		// TODO: change to actual restaurant name
 		Message message = new Message.Builder()
 		.addData("partnerName", userA.getName())
-		.addData("restaurant", date.getRestaurantId().toString())
+		.addData("partnerEmail", userA.getEduEmail())
+		.addData("restaurant", new JSONObject(date.getVenue()).toString())
 		.addData(
-				"startTime",
-				String.valueOf(date.getMatchedInterval().getStartTime()))
-				.addData("endTime",
-						String.valueOf(date.getMatchedInterval().getEndTime()))
-						.build();
+				"time",
+				String.valueOf(date.getMatchedInterval().getStartTime())).build();
+
 
 		// persist message if desired TODO: check if this is necessary
 		/*
@@ -101,10 +100,10 @@ public class RequestController {
 		 * messageObj.setTimestamp(System.currentTimeMillis()); try {
 		 * mgr.persist(messageObj); } finally { mgr.close(); }
 		 */
-		
+
 		try {
 			Sender sender = new Sender(API_KEY);
-//			messageEndpoint.sendMessage(message.toString());
+			//			messageEndpoint.sendMessage(message.toString());
 			MessageEndpoint.doSendViaGcm(message.toString(),
 					sender, userBInfo);
 		} catch (IOException e) {

@@ -1,28 +1,36 @@
 package com.linkedlunchbuddy;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class MatchingAlgorithm {
 
 	private static final String DEFAULT_RESTAURANT_ID = "restaurantId";
+
+
+
 	private static final long ONE_HOUR = 60 * 60;
-	
+
 	static class MatchResult {
 
-		
+
 		private double distanceScore;
 		private double timeIntervalScore;
 		private double score;
 		private Request matchedRequest;
 		private TimeInterval dateTimeInterval;
+		private Map<String, String> matchedRestaurant;
 
 		public MatchResult(double score, double timeIntervalScore,
-				double distanceScore, Request request, TimeInterval interval) {
+				double distanceScore, Request request, TimeInterval interval, 
+				Map<String, String> matchedRestaurant) {
 			this.distanceScore = distanceScore;
 			this.timeIntervalScore = timeIntervalScore;
 			this.score = score;
 			this.matchedRequest = request;
 			this.dateTimeInterval = interval;
+			this.matchedRestaurant = matchedRestaurant;
 
 		}
 	}
@@ -74,12 +82,25 @@ public class MatchingAlgorithm {
 		} else {
 
 			return new LunchDate(currentRequest,
-					bestMatchResult.matchedRequest, DEFAULT_RESTAURANT_ID,
+					bestMatchResult.matchedRequest, bestMatchResult.matchedRestaurant,
 					bestMatchResult.dateTimeInterval);
-
 		}
 	}
 
+	private static Map<String, String> overlapVenues(List<Map<String, String>> venues1, 
+			List<Map<String, String>> venues2) {
+
+		for (Map<String, String> venue1 : venues1) {
+			for (Map<String, String> venue2 : venues2) {
+				// Check if venue 1 is the same as venue 2
+				if (venue1.get("id").equals(venue2.get("id"))) {
+					return venue1;
+				}
+			}
+		}
+
+		return null;
+	}
 	private static MatchResult evaluateTheMatch(Request request1,
 			Request request2) {
 
@@ -90,42 +111,51 @@ public class MatchingAlgorithm {
 		TimeInterval intersection = interval1.overlapInterval(interval2);
 		TimeInterval dateInterval;
 
-		if (intersection == null) {
-			return new MatchResult(0, 0, 0, null, null);
+		// Restaurants overlap?
+		Map<String, String> overlappedRestaurant = overlapVenues(
+				request1.getRestaurantPreferences(), request2.getRestaurantPreferences());
+		
+		if (overlappedRestaurant != null) {
 
-		} else {
-			long length = intersection.getLength();
-			long optimalLength = ONE_HOUR; // / One hour
-
-			long start = intersection.getStartTime();
-			long end = intersection.getEndTime();
-
-			if (length > optimalLength) {
-				long newEnd =  start + optimalLength;
-				end = newEnd;
-				dateInterval = new TimeInterval(start, end);
+			if (intersection == null) {
+				return new MatchResult(0, 0, 0, null, null, null);
 
 			} else {
-				dateInterval = intersection;
-			}
+				long length = intersection.getLength();
+				long optimalLength = ONE_HOUR; // / One hour
 
-			if (length < optimalLength / 2) {
-				return new MatchResult(0, 0, 0, null, null);
-			} else {
-				double intervalScore = intervalScore(length, optimalLength);
-				double distanceScore = distanceScore(request1.getLat(),
-						request1.getLon(), request2.getLat(), request2.getLon());
+				long start = intersection.getStartTime();
+				long end = intersection.getEndTime();
 
-				if (distanceScore < 1.0 / 20.0) {
-					return new MatchResult(0, 0, 0, null, null);
+				if (length > optimalLength) {
+					long newEnd =  start + optimalLength;
+					end = newEnd;
+					dateInterval = new TimeInterval(start, end);
+
+				} else {
+					dateInterval = intersection;
 				}
 
-				double score = intervalScore * distanceScore;
+				if (length < optimalLength / 2) {
+					return new MatchResult(0, 0, 0, null, null, null);
+				} else {
+					double intervalScore = intervalScore(length, optimalLength);
+					double distanceScore = distanceScore(request1.getLat(),
+							request1.getLon(), request2.getLat(), request2.getLon());
 
-				return new MatchResult(score, intervalScore, distanceScore,
-						request2, dateInterval);
+					if (distanceScore < 1.0 / 20.0) {
+						return new MatchResult(0, 0, 0, null, null, null);
+					}
+
+					double score = intervalScore * distanceScore;
+
+					return new MatchResult(score, intervalScore, distanceScore,
+							request2, dateInterval, overlappedRestaurant);
+				}
 			}
 		}
+		
+		return new MatchResult(0, 0, 0, null, null, null);
 	}
 
 	private static double intervalScore(long length, long optimalLength) {
@@ -139,9 +169,9 @@ public class MatchingAlgorithm {
 
 	}
 
-//	public static long hours(long x) {
-//		long temp = x * 60 * 60 * 1000;
-//		return temp;
-//	}
+	//	public static long hours(long x) {
+	//		long temp = x * 60 * 60 * 1000;
+	//		return temp;
+	//	}
 
 }

@@ -1,6 +1,7 @@
 package com.linkedlunchbuddy;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ public class LunchDate {
 
 	private Request requestB;
 
-	private String restaurantId;
+	private Map<String, String> venue;
 
 	private boolean isConfirmed;
 
@@ -28,12 +29,12 @@ public class LunchDate {
 
 	private Date expiryTime;
 
-	public LunchDate(Request requestA, Request requestB, String restaurantId,
+	public LunchDate(Request requestA, Request requestB, Map<String, String> venue,
 			TimeInterval matched) {
 		this.requestA = requestA;
 		this.requestB = requestB;
 		this.matchedInterval = matched;
-		this.restaurantId = restaurantId;
+		this.venue = venue;
 		this.expiryTime = new Date(System.currentTimeMillis() + WAIT_TIME);
 		this.isConfirmed = false;
 	}
@@ -88,12 +89,12 @@ public class LunchDate {
 		this.requestB = requestB;
 	}
 
-	public String getRestaurantId() {
-		return restaurantId;
+	public Map<String, String> getVenue() {
+		return this.venue;
 	}
 
-	public void setRestaurantId(String restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setVenue(Map<String, String> venue) {
+		this.venue = venue;
 	}
 
 }

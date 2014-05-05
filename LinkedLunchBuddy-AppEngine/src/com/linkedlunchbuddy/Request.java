@@ -1,6 +1,7 @@
 package com.linkedlunchbuddy;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +18,8 @@ public class Request {
 	private long startTime;
 	private long endTime;
 	private String userId;
-	private List<String> restaurantPreferences;
+//	private List<String> restaurantPreferences;
+	private List<Map<String, String>> restaurantPreferences;
 	private double lat;
 	private double lon;
 
@@ -52,11 +54,11 @@ public class Request {
 		this.userId = userId;
 	}
 
-	public List<String> getRestaurantPreferences() {
+	public List<Map<String, String>> getRestaurantPreferences() {
 		return restaurantPreferences;
 	}
 
-	public void setRestaurantPreferences(List<String> restaurantPreferences) {
+	public void setRestaurantPreferences(List<Map<String, String>> restaurantPreferences) {
 		this.restaurantPreferences = restaurantPreferences;
 	}
 

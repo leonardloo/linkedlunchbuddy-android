@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.appspot.linear_axle_547.requestcontroller.model.LunchDate;
 import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
+import com.linkedlunchbuddy.requestendpoint.model.JsonMap;
 import com.linkedlunchbuddy.requestendpoint.model.Request;
 
 public class RequestSubmitFragment extends Fragment {
@@ -106,13 +107,20 @@ public class RequestSubmitFragment extends Fragment {
 			request.setEndTime(endUnixTime);
 
 			List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
-			List<String> restaurantIds = new ArrayList<String>();
+			List<JsonMap> restaurantsInfo = new ArrayList<JsonMap>();
 			List<GoogleLocation> displayedRestaurants = new ArrayList<GoogleLocation>();
 
 			if (restaurants != null) {
 				for (GoogleLocation restaurant : restaurants) {
 					displayedRestaurants.add(restaurant);
-					restaurantIds.add(restaurant.getId());
+
+					JsonMap info = new JsonMap();
+					info.put("id", restaurant.getId());
+					info.put("name", restaurant.getName());
+					info.put("lat", "" + restaurant.getLat());
+					info.put("lon", "" + restaurant.getLng());
+					// Convert this map to JsonMap
+					restaurantsInfo.add(info);
 				}
 			}
 			ListView restaurantsList = (ListView) rootView.findViewById(R.id.restaurantsListView);
@@ -120,7 +128,8 @@ public class RequestSubmitFragment extends Fragment {
 					getActivity(), R.layout.google_location_list_item,
 					displayedRestaurants);
 			restaurantsList.setAdapter(adapter);
-			request.setRestaurantPreferences(restaurantIds);
+			
+			request.setRestaurantPreferences(restaurantsInfo);
 
 			startDateText.invalidate();
 			endDateText.invalidate();
