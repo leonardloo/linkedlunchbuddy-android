@@ -10,13 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +31,6 @@ import android.widget.Toast;
 import com.appspot.linear_axle_547.requestcontroller.model.LunchDate;
 import com.linkedlunchbuddy.places.GoogleLocationListAdapter;
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
-import com.linkedlunchbuddy.requestendpoint.model.JsonMap;
 import com.linkedlunchbuddy.requestendpoint.model.Request;
 
 public class RequestSubmitFragment extends Fragment {
@@ -107,20 +108,21 @@ public class RequestSubmitFragment extends Fragment {
 			request.setEndTime(endUnixTime);
 
 			List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
-			List<JsonMap> restaurantsInfo = new ArrayList<JsonMap>();
+			List<String> restaurantsInfo = new ArrayList<String>();
 			List<GoogleLocation> displayedRestaurants = new ArrayList<GoogleLocation>();
 
 			if (restaurants != null) {
 				for (GoogleLocation restaurant : restaurants) {
 					displayedRestaurants.add(restaurant);
-
-					JsonMap info = new JsonMap();
+					// Transform map to JSONObject, and then to String
+					Map<String, String> info = new HashMap<String, String>();
 					info.put("id", restaurant.getId());
 					info.put("name", restaurant.getName());
 					info.put("lat", "" + restaurant.getLat());
 					info.put("lon", "" + restaurant.getLng());
-					// Convert this map to JsonMap
-					restaurantsInfo.add(info);
+					// Convert this map to String
+					JSONObject infoObject = new JSONObject(info);
+					restaurantsInfo.add(infoObject.toString());
 				}
 			}
 			ListView restaurantsList = (ListView) rootView.findViewById(R.id.restaurantsListView);

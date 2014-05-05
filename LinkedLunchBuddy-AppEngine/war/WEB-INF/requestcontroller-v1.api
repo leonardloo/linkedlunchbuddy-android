@@ -115,7 +115,7 @@
           "restaurantPreferences" : {
             "type" : "array",
             "items" : {
-              "$ref" : "JsonMap"
+              "type" : "string"
             }
           },
           "lat" : {

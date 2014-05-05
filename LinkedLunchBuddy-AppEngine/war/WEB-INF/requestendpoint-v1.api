@@ -150,7 +150,7 @@
           "restaurantPreferences" : {
             "type" : "array",
             "items" : {
-              "$ref" : "JsonMap"
+              "type" : "string"
             }
           },
           "lat" : {
@@ -163,10 +163,6 @@
             "type" : "string"
           }
         }
-      },
-      "JsonMap" : {
-        "id" : "JsonMap",
-        "type" : "object"
       },
       "CollectionResponse_Request" : {
         "id" : "CollectionResponse_Request",

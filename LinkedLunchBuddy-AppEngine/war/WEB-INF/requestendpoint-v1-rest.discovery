@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/NBQEkfStE0PSuCeptZjtjqbrv5Y\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/Z5rxMA7r5I1njRSClxsJv7H5FPg\"",
  "discoveryVersion": "v1",
  "id": "requestendpoint:v1",
  "name": "requestendpoint",
@@ -88,10 +88,6 @@
     }
    }
   },
-  "JsonMap": {
-   "id": "JsonMap",
-   "type": "object"
-  },
   "Request": {
    "id": "Request",
    "type": "object",
@@ -115,7 +111,7 @@
     "restaurantPreferences": {
      "type": "array",
      "items": {
-      "$ref": "JsonMap"
+      "type": "string"
      }
     },
     "startTime": {

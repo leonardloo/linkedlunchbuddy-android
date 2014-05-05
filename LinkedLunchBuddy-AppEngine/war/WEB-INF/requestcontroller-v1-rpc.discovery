@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/6jQx3XqWqqd2IA1H_VZA4qfG94w\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/M23Uyt3pmcqGh9Q6mt89g1lJVmk\"",
  "discoveryVersion": "v1",
  "id": "requestcontroller:v1",
  "name": "requestcontroller",
@@ -125,7 +125,7 @@
     "restaurantPreferences": {
      "type": "array",
      "items": {
-      "$ref": "JsonMap"
+      "type": "string"
      }
     },
     "startTime": {

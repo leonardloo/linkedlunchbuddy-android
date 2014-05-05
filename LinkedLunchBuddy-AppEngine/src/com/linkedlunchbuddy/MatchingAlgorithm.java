@@ -1,8 +1,13 @@
 package com.linkedlunchbuddy;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 public class MatchingAlgorithm {
 
@@ -101,6 +106,27 @@ public class MatchingAlgorithm {
 
 		return null;
 	}
+	
+	private static List<Map<String, String>> convertFromString(List<String> restaurants) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for (String restaurant : restaurants) {
+			Map<String, String> map = new HashMap<String, String>();
+			// Convert String to JsonMap
+			try {
+				JSONObject restaurantJson = new JSONObject(restaurant);
+				map.put("id", restaurantJson.get("id").toString());
+				map.put("lat", restaurantJson.get("lat").toString());
+				map.put("lng", restaurantJson.get("lng").toString());
+				map.put("name", restaurantJson.get("name").toString());
+				list.add(map);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
 	private static MatchResult evaluateTheMatch(Request request1,
 			Request request2) {
 
@@ -113,7 +139,7 @@ public class MatchingAlgorithm {
 
 		// Restaurants overlap?
 		Map<String, String> overlappedRestaurant = overlapVenues(
-				request1.getRestaurantPreferences(), request2.getRestaurantPreferences());
+				convertFromString(request1.getRestaurantPreferences()), convertFromString(request2.getRestaurantPreferences()));
 		
 		if (overlappedRestaurant != null) {
 

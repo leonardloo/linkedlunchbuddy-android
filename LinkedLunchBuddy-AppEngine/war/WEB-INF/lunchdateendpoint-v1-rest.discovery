@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/Rtjq8b3oTsIUlIiSaN-ihwrxWx8\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/X6AqazqAd0WQ3WgBB8lVGN71e4M\"",
  "discoveryVersion": "v1",
  "id": "lunchdateendpoint:v1",
  "name": "lunchdateendpoint",
@@ -144,7 +144,7 @@
     "restaurantPreferences": {
      "type": "array",
      "items": {
-      "$ref": "JsonMap"
+      "type": "string"
      }
     },
     "startTime": {

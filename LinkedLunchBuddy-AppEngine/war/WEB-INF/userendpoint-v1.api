@@ -47,6 +47,22 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "userendpoint.insertUser" : {
+      "path" : "user",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.linkedlunchbuddy.UserEndpoint.insertUser",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "userendpoint.removeUser" : {
       "path" : "user/{id}",
       "httpMethod" : "DELETE",
@@ -66,22 +82,6 @@
       },
       "response" : {
         "body" : "empty"
-      }
-    },
-    "userendpoint.insertUser" : {
-      "path" : "user",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.linkedlunchbuddy.UserEndpoint.insertUser",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
       }
     },
     "userendpoint.listUser" : {
@@ -181,8 +181,6 @@
           "$ref" : "User"
         }
       },
-      "com.linkedlunchbuddy.UserEndpoint.removeUser" : {
-      },
       "com.linkedlunchbuddy.UserEndpoint.insertUser" : {
         "request" : {
           "$ref" : "User"
@@ -190,6 +188,8 @@
         "response" : {
           "$ref" : "User"
         }
+      },
+      "com.linkedlunchbuddy.UserEndpoint.removeUser" : {
       },
       "com.linkedlunchbuddy.UserEndpoint.listUser" : {
         "response" : {

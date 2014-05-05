@@ -16,7 +16,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.linkedlunchbuddy.placesapi.GoogleLocation;
-import com.linkedlunchbuddy.requestendpoint.model.JsonMap;
 import com.linkedlunchbuddy.requestendpoint.model.Request;
 
 public class RequestActivity extends FragmentActivity {
@@ -78,7 +77,7 @@ public class RequestActivity extends FragmentActivity {
 
 		// Initialization of Request fields
 		currentRequest = new Request();
-		currentRequest.setRestaurantPreferences(new ArrayList<JsonMap>());
+		currentRequest.setRestaurantPreferences(new ArrayList<String>());
 		// Set user
 		dataHandler = new DataHandler(getBaseContext());
 		dataHandler.open();

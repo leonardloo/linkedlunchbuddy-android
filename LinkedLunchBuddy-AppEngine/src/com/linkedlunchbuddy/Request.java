@@ -19,7 +19,8 @@ public class Request {
 	private long endTime;
 	private String userId;
 //	private List<String> restaurantPreferences;
-	private List<Map<String, String>> restaurantPreferences;
+//	private List<Map<String, String>> restaurantPreferences;
+	private List<String> restaurantPreferences;
 	private double lat;
 	private double lon;
 
@@ -54,11 +55,11 @@ public class Request {
 		this.userId = userId;
 	}
 
-	public List<Map<String, String>> getRestaurantPreferences() {
+	public List<String> getRestaurantPreferences() {
 		return restaurantPreferences;
 	}
 
-	public void setRestaurantPreferences(List<Map<String, String>> restaurantPreferences) {
+	public void setRestaurantPreferences(List<String> restaurantPreferences) {
 		this.restaurantPreferences = restaurantPreferences;
 	}
 

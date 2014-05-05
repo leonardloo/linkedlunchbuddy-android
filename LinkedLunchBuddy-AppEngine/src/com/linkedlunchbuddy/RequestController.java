@@ -59,7 +59,9 @@ public class RequestController {
 		}
 
 		result = MatchingAlgorithm.findMatch(request, requestPool);
-		notifyUserB(result);
+		if (result != null) {
+			notifyUserB(result);
+		}
 		return result;
 	}
 
