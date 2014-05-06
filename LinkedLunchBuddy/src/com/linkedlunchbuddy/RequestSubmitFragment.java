@@ -249,10 +249,11 @@ public class RequestSubmitFragment extends Fragment {
 				restaurants = new ArrayList<Map<String,String>>();
 				restaurants.add(restaurant);
 				
-				Date date = new Date(lunchDate.getMatchedInterval().getStartTime() * 1000);
+				/*Date date = new Date(lunchDate.getMatchedInterval().getStartTime() * 1000);
 				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 				String time = df.format(date);
-				System.out.println(time);
+				System.out.println(time);*/
+				String time = "" + lunchDate.getMatchedInterval().getStartTime() * 1000;
 				
 				statusToBeStored = new LunchDateStatus(LunchDateStatus.STATUS_MATCHED, 
 						lunchDate.getRequestB().getUserName(), lunchDate.getRequestB().getUserId(), restaurants, time, "" + new Date().getTime());				

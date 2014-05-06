@@ -72,9 +72,6 @@ public class MatchingAlgorithm {
 					candidate);
 			double matchScore = matchResult.score;
 
-			System.out.println(currentRequest.getUserId() + " "
-					+ candidate.getUserId() + " " + matchScore);
-
 			if (matchScore > bestScore) {
 				bestScore = matchScore;
 				bestMatchResult = matchResult;
@@ -106,7 +103,7 @@ public class MatchingAlgorithm {
 
 		return null;
 	}
-	
+
 	private static List<Map<String, String>> convertFromString(List<String> restaurants) {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (String restaurant : restaurants) {
@@ -124,7 +121,7 @@ public class MatchingAlgorithm {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return list;
 	}
 	private static MatchResult evaluateTheMatch(Request request1,
@@ -138,17 +135,19 @@ public class MatchingAlgorithm {
 		TimeInterval dateInterval;
 
 		// Restaurants overlap?
-		// TODO: Have to eventually convert
 		String overlappedRestaurant = null;
 		for (String restaurantMap : request1.getRestaurantPreferences()) {
-			if (request2.getRestaurantPreferences().contains(restaurantMap)) {
-				overlappedRestaurant = restaurantMap;
+			for (String restaurantMap2 : request2.getRestaurantPreferences()) {
+				if (restaurantMap.equals(restaurantMap2)) {
+					overlappedRestaurant = restaurantMap;
+					break;
+				}
 			}
 		}
 		/*
 		Map<String, String> overlappedRestaurant = overlapVenues(
 				convertFromString(request1.getRestaurantPreferences()), convertFromString(request2.getRestaurantPreferences()));
-		*/
+		 */
 		if (overlappedRestaurant != null) {
 
 			if (intersection == null) {
@@ -188,7 +187,7 @@ public class MatchingAlgorithm {
 				}
 			}
 		}
-		
+
 		return new MatchResult(0, 0, 0, null, null, null);
 	}
 
