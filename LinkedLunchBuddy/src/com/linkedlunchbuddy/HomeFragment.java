@@ -5,11 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -50,13 +52,12 @@ public class HomeFragment extends Fragment {
 		dataHandler.open();
 		Cursor cursor = dataHandler.allUsers();
 		cursor.moveToFirst();
-
+		// Displays different initial marker depending on gender
 		gender = cursor.getString(4);
 		try {
 
 			googleMap = ((MapFragment) getFragmentManager().findFragmentById(
-					R.id.map)).getMap();
-			//System.out.println(cursor.getString(5));
+					R.id.mapHome)).getMap();
 			JSONObject lunchDateObject = new JSONObject(cursor.getString(5));
 			LunchDateStatus lunchDateStatus = new LunchDateStatus(lunchDateObject);
 			String status = lunchDateStatus.getStatus();
@@ -65,29 +66,29 @@ public class HomeFragment extends Fragment {
 			String timeOfLunchDateString = "";
 
 			// Do two checks
-			/*
+			// If time of lunch date has passed, revert back to Default
 			if (status.equals(LunchDateStatus.STATUS_MATCHED)) {
-				if (lunchDateStatus.getTime() != null) {
-					Long timeOfLunchDate = Long.parseLong(lunchDateStatus.getTime());
-					Date dateOfLunchDate = new Date(timeOfLunchDate);
-					DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-					timeOfLunchDateString = df.format(dateOfLunchDate);
-					if (currentTime >= timeOfLunchDate) { // Lunch Date is over
-						// Reset to STATUS_DEFAULT
-						dataHandler.updateLunchDateStatus(new LunchDateStatus(
-								LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>(), "time", "submittedTime").
-								toJSON().toString());
-					}
+				Long timeOfLunchDate = Long.parseLong(lunchDateStatus.getTime());
+				Date dateOfLunchDate = new Date(timeOfLunchDate);
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US);
+				timeOfLunchDateString = df.format(dateOfLunchDate);
+				if (currentTime >= timeOfLunchDate) { // Lunch Date is over
+					// Reset to STATUS_DEFAULT
+					dataHandler.updateLunchDateStatus(new LunchDateStatus(
+							LunchDateStatus.STATUS_DEFAULT, "name", "email", 
+							new ArrayList<Map<String, String>>(), "100", "100").
+							toJSON().toString());
 				}
 			}
 
-			// Match is not found 30minutes after submittedTime
+			// Change to No request if Match is not found 30min after submittedTime
 			if (status.equals(LunchDateStatus.STATUS_PENDING)) {
 				// Change to STATUS_REQUESTEXPIRED
 				Long submittedTime = Long.parseLong(lunchDateStatus.getSubmittedTime());
 				if (currentTime > (submittedTime + (1000 * 60 * 30))) {
 					dataHandler.updateLunchDateStatus(new LunchDateStatus(
-							LunchDateStatus.STATUS_REQUESTEXPIRED, "name", "email", new ArrayList<Map<String, String>>(), "time", "submittedTime").
+							LunchDateStatus.STATUS_REQUESTEXPIRED, "name", "email", 
+							new ArrayList<Map<String, String>>(), "100", "100").
 							toJSON().toString());
 				}
 			}
@@ -96,12 +97,12 @@ public class HomeFragment extends Fragment {
 			lunchDateObject = new JSONObject(cursor.getString(5));
 			lunchDateStatus = new LunchDateStatus(lunchDateObject);
 			status = lunchDateStatus.getStatus();
-			*/
+
 			// Match is found!
 			if (status.equals(LunchDateStatus.STATUS_MATCHED)) {
 				Long timeOfLunchDate = Long.parseLong(lunchDateStatus.getTime());
 				Date dateOfLunchDate = new Date(timeOfLunchDate);
-				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US);
 				timeOfLunchDateString = df.format(dateOfLunchDate);
 				// The set restaurant will be the first index in the restaurant list
 				Map<String, String> restaurantAllocated = lunchDateStatus.getRestaurants().get(0);
@@ -150,7 +151,8 @@ public class HomeFragment extends Fragment {
 					}
 					LatLng restaurantLocation = new LatLng(lat, lng);
 					MarkerOptions marker = new MarkerOptions().position(restaurantLocation)
-							.title(restaurant.get("name")).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurantmarker));
+							.title(restaurant.get("name")).icon(BitmapDescriptorFactory.
+									fromResource(R.drawable.ic_restaurantmarker));
 					googleMap.addMarker(marker);
 				}
 				// Zoom according to bounding box
@@ -167,7 +169,6 @@ public class HomeFragment extends Fragment {
 			} 
 
 			// Either no match found or request not yet sent
-			// Slightly bugged: Sometimes have to check cursor directly
 			else if (status.equals(LunchDateStatus.STATUS_REQUESTEXPIRED) || 
 					status.equals(LunchDateStatus.STATUS_DEFAULT)) {
 
@@ -202,9 +203,11 @@ public class HomeFragment extends Fragment {
 					public void onMapClick(LatLng point) {
 						googleMap.clear();
 						if (gender.equals("female")) {
-							googleMap.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_femalemarker)));
+							googleMap.addMarker(new MarkerOptions().position(point).icon(
+									BitmapDescriptorFactory.fromResource(R.drawable.ic_femalemarker)));
 						} else {
-							googleMap.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_malemarker)));
+							googleMap.addMarker(new MarkerOptions().position(point).icon(
+									BitmapDescriptorFactory.fromResource(R.drawable.ic_malemarker)));
 						}
 						adjustCameraAtPointAndZoom(point, 14);
 					}
@@ -214,7 +217,8 @@ public class HomeFragment extends Fragment {
 
 				// Set status back to default
 				dataHandler.updateLunchDateStatus(new LunchDateStatus(
-						LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>(), "100", "100").
+						LunchDateStatus.STATUS_DEFAULT, "name", "email", 
+						new ArrayList<Map<String, String>>(), "100", "100").
 						toJSON().toString());
 
 			} 
@@ -226,8 +230,6 @@ public class HomeFragment extends Fragment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-
 
 		cursor.close();
 		dataHandler.close();
@@ -246,17 +248,17 @@ public class HomeFragment extends Fragment {
 		android.location.Location location = locationManager
 				.getLastKnownLocation(provider);
 
-		LatLng selectedLocation = new LatLng(39.953229300000000000, -75.194119099999970000);
-		//TODO: Uncomment this on an actual phone
-		//						new LatLng(location.getLatitude(),
-		//						location.getLongitude());
+		LatLng selectedLocation = new LatLng(location.getLatitude(),
+								location.getLongitude());
 
 		// create marker
 		MarkerOptions marker;
 		if (gender.equals("female")) {
-			marker = new MarkerOptions().position(selectedLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_femalemarker));
+			marker = new MarkerOptions().position(selectedLocation).icon(
+					BitmapDescriptorFactory.fromResource(R.drawable.ic_femalemarker));
 		} else {
-			marker = new MarkerOptions().position(selectedLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_malemarker));
+			marker = new MarkerOptions().position(selectedLocation).icon(
+					BitmapDescriptorFactory.fromResource(R.drawable.ic_malemarker));
 
 		}
 
@@ -294,6 +296,16 @@ public class HomeFragment extends Fragment {
 		public View getInfoWindow(final Marker marker) {
 			return null;
 		}
+	}
+
+	@Override
+	public void onDestroyView() 
+	{
+		super.onDestroyView(); 
+		Fragment fragment = (getFragmentManager().findFragmentById(R.id.mapHome));  
+		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+		ft.remove(fragment);
+		ft.commit();
 	}
 
 }

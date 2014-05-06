@@ -2,14 +2,10 @@ package com.linkedlunchbuddy;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import android.app.Notification;
@@ -17,10 +13,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
@@ -59,11 +53,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	static String fbgender;
 	static String email;
 
-	/*
-	 * TODO: Set this to a valid project number. See
-	 * http://developers.google.com/eclipse/docs/cloud_endpoints for more
-	 * information.
-	 */
 	protected static final String PROJECT_NUMBER = "925319909484";
 
 	/**
@@ -73,8 +62,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 *            the activity's context.
 	 */
 	public static void register(Context mContext, String fbid_, String fbfirstname_, String fblastname_, String fbgender_, String email_) {
-//		 GCMRegistrar.checkDevice(mContext);
-//		 GCMRegistrar.checkManifest(mContext);
 		fbid = fbid_;
 		fbfirstname = fbfirstname_;
 		fblastname = fblastname_;
@@ -117,19 +104,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onError(Context context, String errorId) {
-		/*
-    sendNotificationIntent(
-        context,
-        "Registration with Google Cloud Messaging...FAILED!\n\n"
-            + "A Google Cloud Messaging registration error occurred (errorid: "
-            + errorId
-            + "). "
-            + "Do you have your project number ("
-            + ("".equals(PROJECT_NUMBER) ? "<unset>"
-                : PROJECT_NUMBER)
-            + ")  set correctly, and do you have Google Cloud Messaging enabled for the "
-            + "project?", true, true);
-		 */
 	}
 
 	/**
@@ -144,13 +118,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// Parse message
 		String name = message.split("partnerName=")[1].split(",")[0];
 		String email = message.split("partnerEmail=")[1].split(",")[0];
-		// Build time from long unix
 		String timeInLong = message.split("time=")[1].split(Pattern.quote("}"))[0];
 		// Store time in long
 		String time = "" + (Long.parseLong(timeInLong) * 1000);
-//		Date date = new Date(Long.parseLong(timeInLong) * 1000);
-//		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-//		String time = df.format(date);
 		String restaurantName = message.split("name\":\"")[1].split("\"")[0];
 		String restaurantLat = message.split("lat\":\"")[1].split("\"")[0];
 		String restaurantLon = message.split("lon\":\"")[1].split("\"")[0];
@@ -161,26 +131,29 @@ public class GCMIntentService extends GCMBaseIntentService {
 		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		list.add(restaurant);
 		dataHandler.updateLunchDateStatus(new LunchDateStatus(
-					LunchDateStatus.STATUS_MATCHED, name, email, list, time, "").
-					toJSON().toString());
-		
+				LunchDateStatus.STATUS_MATCHED, name, email, list, time, "").
+				toJSON().toString());
+
 		dataHandler.close();
-		
-		 Intent homeIntent = new Intent(this, MainActivity.class);
-		 homeIntent.putExtra("fromPushNotification", true);
-		    PendingIntent pIntent = PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		    // Build notification
-		    Notification notification = new Notification.Builder(this)
-		        .setContentTitle("You have a LunchBuddy: " + name)
-		        .setContentText("You have been matched with " + name + " at " + list.get(0)  + " at " + time)
-		        .setSmallIcon(R.drawable.ic_femalemarker)
-		        .setContentIntent(pIntent).build();
-		    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		    // hide the notification after its selected
-		    notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		Intent homeIntent = new Intent(this, MainActivity.class);
+		homeIntent.putExtra("fromPushNotification", true);
+		PendingIntent pIntent = PendingIntent.getActivity
+				(this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		    notificationManager.notify(0, notification);
+		// Build notification
+		Notification notification = new Notification.Builder(this)
+		.setContentTitle("You have a LunchBuddy: " + name)
+		.setContentText("You have been matched with " + 
+				name + " at " + list.get(0)  + " at " + time)
+				.setSmallIcon(R.drawable.ic_femalemarker)
+				.setContentIntent(pIntent).build();
+		NotificationManager notificationManager = 
+				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		// hide the notification after its selected
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+		notificationManager.notify(0, notification);
 
 	}
 
@@ -204,10 +177,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 			restaurant.put("lat", "0");
 			restaurant.put("lng", "0");
 			restaurant.put("name", "dummy");
-			
+
 			dataHandler.insertUser(fbid, email, fbfirstname,
 					fblastname, fbgender, (new LunchDateStatus(
-							LunchDateStatus.STATUS_DEFAULT, "name", "email", restaurants, "100", "100")).
+							LunchDateStatus.STATUS_DEFAULT, "name", "email", 
+							restaurants, "100", "100")).
 							toJSON().toString());
 			dataHandler.close();
 			// Insert to backend
@@ -216,17 +190,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 					.setGender(fbgender).setFbId(fbid).setDeviceRegistrationId(registration);
 
 			// Async task endpoint
-			try {
-				User createdUser = new CreateUserTask(createUser)
-						.execute().get();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			new CreateUserTask(createUser).execute();
+
 			/*
 			 * Using cloud endpoints, see if the device has already been
 			 * registered with the backend
@@ -260,9 +225,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 										+ " "
 										+ android.os.Build.PRODUCT,
 										"UTF-8"))).execute();
-				// Create user and insert user here
-
-
 
 			}
 		} catch (IOException e) {
@@ -270,31 +232,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 					"Exception received when attempting to register with server at "
 							+ endpoint.getRootUrl(), e);
 		}
-		/*
-      sendNotificationIntent(
-          context,
-          "1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
-              + "2) Registration with Endpoints Server...FAILED!\n\n"
-              + "Unable to register your device with your Cloud Endpoints server running at "
-              + endpoint.getRootUrl()
-              + ". Either your Cloud Endpoints server is not deployed to App Engine, or "
-              + "your settings need to be changed to run against a local instance "
-              + "by setting LOCAL_ANDROID_RUN to 'true' in CloudEndpointUtils.java.",
-          true, true);
-      return;
-    }
-
-    sendNotificationIntent(
-        context,
-        "1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
-            + "2) Registration with Endpoints Server...SUCCEEDED!\n\n"
-            + "Device registration with Cloud Endpoints Server running at  "
-            + endpoint.getRootUrl()
-            + " succeeded!\n\n"
-            + "To send a message to this device, "
-            + "open your browser and navigate to the sample application at "
-            + getWebSampleUrl(endpoint.getRootUrl()), false, true);
-		 */
 	}
 
 	/**
@@ -315,66 +252,15 @@ public class GCMIntentService extends GCMBaseIntentService {
 				Log.e(GCMIntentService.class.getName(),
 						"Exception received when attempting to unregister with server at "
 								+ endpoint.getRootUrl(), e);
-				sendNotificationIntent(
-						context,
-						"1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
-								+ "2) De-registration with Endpoints Server...FAILED!\n\n"
-								+ "We were unable to de-register your device from your Cloud "
-								+ "Endpoints server running at "
-								+ endpoint.getRootUrl() + "."
-								+ "See your Android log for more information.",
-								true, true);
+
 				return;
 			}
 		}
 
-		sendNotificationIntent(
-				context,
-				"1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
-						+ "2) De-registration with Endpoints Server...SUCCEEDED!\n\n"
-						+ "Device de-registration with Cloud Endpoints server running at  "
-						+ endpoint.getRootUrl() + " succeeded!", false, true);
+
 	}
 
-	/**
-	 * Generate a notification intent and dispatch it to the RegisterActivity.
-	 * This is how we get information from this service (non-UI) back to the
-	 * activity.
-	 * 
-	 * For this to work, the 'android:launchMode="singleTop"' attribute needs to
-	 * be set for the RegisterActivity in AndroidManifest.xml.
-	 * 
-	 * @param context
-	 *            the application context
-	 * @param message
-	 *            the message to send
-	 * @param isError
-	 *            true if the message is an error-related message; false
-	 *            otherwise
-	 * @param isRegistrationMessage
-	 *            true if this message is related to registration/unregistration
-	 */
-	private void sendNotificationIntent(Context context, String message,
-			boolean isError, boolean isRegistrationMessage) {
-		Intent notificationIntent = new Intent(context, RegisterActivity.class);
-		notificationIntent.putExtra("gcmIntentServiceMessage", true);
-		notificationIntent.putExtra("registrationMessage",
-				isRegistrationMessage);
-		notificationIntent.putExtra("error", isError);
-		notificationIntent.putExtra("message", message);
-		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(notificationIntent);
-	}
 
-	private String getWebSampleUrl(String endpointUrl) {
-		// Not the most elegant solution; we'll improve this in the future
-		if (CloudEndpointUtils.LOCAL_ANDROID_RUN) {
-			return CloudEndpointUtils.LOCAL_APP_ENGINE_SERVER_URL
-					+ "index.html";
-		}
-		return endpointUrl.replace("/_ah/api/", "/index.html");
-	}
-	
 	/**
 	 * CREATE A USER WITH THE USERENDPOINT BUILDER
 	 * 
@@ -405,5 +291,5 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return createdUser;
 		}
 	}
-	
+
 }

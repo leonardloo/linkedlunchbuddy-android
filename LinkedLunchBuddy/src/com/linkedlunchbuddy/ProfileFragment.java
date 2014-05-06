@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,9 @@ public class ProfileFragment extends ListFragment {
 
 		String[] listItemValue = {emailValue, nameValue, genderValue};
 		dataHandler.close();
-		setListAdapter(new ProfileListViewAdapter(getActivity(), R.layout.fragment_profile, R.id.profileTitle, R.id.image1, listItems, listItemValue, listImages ));
+		setListAdapter(new ProfileListViewAdapter(getActivity(), 
+				R.layout.fragment_profile, R.id.profileTitle, R.id.image1, 
+				listItems, listItemValue, listImages ));
 
 
 		return rootView;
@@ -52,8 +53,10 @@ public class ProfileFragment extends ListFragment {
 		if (position == 1) {
 			v.setBackgroundColor(getResources().getColor(android.R.color.tab_indicator_text));
 				FragmentManager fragmentManager = getFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.home_frame_container, new ProfileNameFragment(), "Profile Name");
+				FragmentTransaction fragmentTransaction = 
+						fragmentManager.beginTransaction();
+				fragmentTransaction.replace(R.id.home_frame_container, 
+						new ProfileNameFragment(), "Profile Name");
 				fragmentTransaction.commit();
 
 		}

@@ -22,7 +22,8 @@ public class ProfileListViewAdapter extends ArrayAdapter {
     int imageId;
  
     @SuppressWarnings("unchecked")
-	ProfileListViewAdapter(Activity context, int layoutId, int textId, int imageId, String[] items, String[] itemValues, boolean[] arrows)
+	ProfileListViewAdapter(Activity context, int layoutId, int textId, 
+			int imageId, String[] items, String[] itemValues, boolean[] arrows)
     {
         super(context, layoutId, items);
  

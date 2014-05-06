@@ -1,14 +1,7 @@
 package com.linkedlunchbuddy;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,14 +16,13 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.linkedlunchbuddy.userendpoint.model.User;
 
 public class EmailActivity extends Activity {
 
 	private static final String TAG = "EmailActivity";
 	private UiLifecycleHelper uiHelper;
 	private Session session = Session.getActiveSession();
-	
+
 	private EditText emailField;
 	private String fbid;
 	private String fbfirstname;
@@ -40,7 +32,7 @@ public class EmailActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_email);
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
@@ -60,7 +52,8 @@ public class EmailActivity extends Activity {
 							"Please provide a valid .edu email",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					GCMIntentService.register(getApplicationContext(), fbid, fbfirstname, fblastname, fbgender, emailString);
+					GCMIntentService.register(getApplicationContext(), 
+							fbid, fbfirstname, fblastname, fbgender, emailString);
 					Intent intent = new Intent(getApplicationContext(),
 							BlurbActivity.class);
 
@@ -87,17 +80,17 @@ public class EmailActivity extends Activity {
 			Log.i(TAG, "User is logged in");
 			new Request(session, "/me", null, HttpMethod.GET,
 					new Request.Callback() {
-						public void onCompleted(Response response) {
-							fbid = (String) response.getGraphObject()
-									.getProperty("id");
-							fbfirstname = (String) response.getGraphObject()
-									.getProperty("first_name");
-							fblastname = (String) response.getGraphObject()
-									.getProperty("last_name");
-							fbgender = (String) response.getGraphObject()
-									.getProperty("gender");
-						}
-					}).executeAsync();
+				public void onCompleted(Response response) {
+					fbid = (String) response.getGraphObject()
+							.getProperty("id");
+					fbfirstname = (String) response.getGraphObject()
+							.getProperty("first_name");
+					fblastname = (String) response.getGraphObject()
+							.getProperty("last_name");
+					fbgender = (String) response.getGraphObject()
+							.getProperty("gender");
+				}
+			}).executeAsync();
 
 		} else if (state.isClosed()) {
 			Log.i(TAG, "User is logged out");

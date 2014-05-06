@@ -18,9 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -30,7 +27,6 @@ public class HomeActivity extends FragmentActivity {
 	private static final String TAG = "HomeActivity";
 	private UiLifecycleHelper uiHelper;
 	private Session session = Session.getActiveSession();
-	public String name = "";
 	
 	// Drawer elements
 	private DrawerLayout mDrawerLayout;
@@ -77,10 +73,8 @@ public class HomeActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		// Profile
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-		// Request
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		// Logout
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 
 		
 
@@ -192,10 +186,6 @@ public class HomeActivity extends FragmentActivity {
 			fragment = new ProfileFragment();
 			break;
 		case 2:
-			Intent requestIntent = new Intent(this, RequestActivity.class);
-			startActivity(requestIntent); 
-			break;
-		case 3:
 			// Logout
 			session.closeAndClearTokenInformation();
 			Intent logoutIntent = new Intent(this, MainActivity.class);
@@ -256,24 +246,7 @@ public class HomeActivity extends FragmentActivity {
 	};
 
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-		// Harmless bug: Callback fires twice
-		if (state.isOpened()) {
-			Log.i(TAG, "User is logged in");
-			new Request(
-					session,
-					"/me",
-					null,
-					HttpMethod.GET,
-					new Request.Callback() {
-						public void onCompleted(Response response) {
-							// Can add in additional profile fields
-							System.out.println(response.getGraphObject());
-							//name = (String) response.getGraphObject().getProperty("first_name");
-						}
-					}
-					).executeAsync();
-	
-		} else if (state.isClosed()) {
+		if (state.isClosed()) {
 			Log.i(TAG, "User is logged out");
 			// This will be unreachable but leave this here
 			Intent intent = new Intent(this, MainActivity.class);
@@ -286,11 +259,6 @@ public class HomeActivity extends FragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		// For scenarios where the main activity is launched and user
-		// session is not null, the session state change notification
-		// may not be triggered. Trigger it if it's open/closed.
-		
-		//TODO:Handle resuming
 		session.addCallback(callback);
 		if (session != null &&
 				(session.isOpened() || session.isClosed()) ) {

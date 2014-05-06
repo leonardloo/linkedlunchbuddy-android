@@ -26,7 +26,8 @@ public class LunchDateStatus {
 
 	public LunchDateStatus() { };
 	
-	public LunchDateStatus(String status, String partner, String partnerEmail, List<Map<String, String>> restaurants, String time, String submittedTime) {
+	public LunchDateStatus(String status, String partner, String partnerEmail, 
+			List<Map<String, String>> restaurants, String time, String submittedTime) {
 		this.status = status;
 		this.partner = partner;
 		this.partnerEmail = partnerEmail;
@@ -41,7 +42,6 @@ public class LunchDateStatus {
 			partner = jsonObject.getString("partnerName");
 			partnerEmail = jsonObject.getString("partnerEmail");
 			JSONArray restaurantsArray = new JSONArray(jsonObject.getString("restaurants"));
-//			System.out.println(restaurantsString);
 			restaurants = new ArrayList<Map<String, String>>();
 			for (int i = 0; i < restaurantsArray.length(); i++) {
 				JSONObject restaurant = restaurantsArray.getJSONObject(i);

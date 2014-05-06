@@ -1,7 +1,5 @@
 package com.linkedlunchbuddy;
 
-import java.util.Arrays;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -40,7 +35,6 @@ public class MainFragment extends Fragment {
 			dataHandler.open();
 	        Intent intent;
 			// If data handler already has an entry, do not let user register again
-	        // TODO: Authenticate for multiple users
 			if (dataHandler.allUsers().getCount() > 0) {
 				intent = new Intent(getActivity(), HomeActivity.class);
 			} else {
@@ -61,9 +55,6 @@ public class MainFragment extends Fragment {
 	    View view = inflater.inflate(R.layout.activity_main, container, false);
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    authButton.setFragment(this);
-	    // Get additional permissions necessary for future use
-	    //authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
-
 	    return view;
 	}
 	
@@ -77,9 +68,6 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    // For scenarios where the main activity is launched and user
-	    // session is not null, the session state change notification
-	    // may not be triggered. Trigger it if it's open/closed.
 	    Session session = Session.getActiveSession();
 	    if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {

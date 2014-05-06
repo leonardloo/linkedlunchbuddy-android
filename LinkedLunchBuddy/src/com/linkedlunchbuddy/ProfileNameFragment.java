@@ -22,16 +22,16 @@ import android.widget.TextView;
 import com.linkedlunchbuddy.userendpoint.model.User;
 
 public class ProfileNameFragment extends DialogFragment {
-	
+
 	private DataHandler dataHandler;
 	private EditText firstName;
 	private EditText lastName;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_profilename, container, false);
-		
+
 		firstName = (EditText) rootView.findViewById(R.id.firstNameField);
 		lastName = (EditText) rootView.findViewById(R.id.lastNameField);
 		// Set text to be core data
@@ -47,14 +47,14 @@ public class ProfileNameFragment extends DialogFragment {
 		saveButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				// Alert dialog
 				new AlertDialog.Builder(getActivity())
-			    .setTitle("Update name")
-			    .setMessage("Are you sure you want to change your name?")
-			    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			        public void onClick(DialogInterface dialog, int which) { 
-			            // continue with update
+				.setTitle("Update name")
+				.setMessage("Are you sure you want to change your name?")
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) { 
+						// continue with update
 						dataHandler = new DataHandler(getActivity().getBaseContext());
 						dataHandler.open();
 						dataHandler.changeName(firstName.getText().toString(), 
@@ -68,43 +68,31 @@ public class ProfileNameFragment extends DialogFragment {
 						try {
 							updateUser = new getUserTask(userEmail).execute().get();
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						//update user
+
+						// Update user
 						updateUser.setName(firstName.getText().toString() + " " + 
 								lastName.getText().toString());
-						User updatedUser = null;
-						try {
-							updatedUser = new updateUserTask(updateUser).execute().get();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						
+						new updateUserTask(updateUser).execute();
 
 						FragmentManager fragmentManager = getFragmentManager();
 						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-						fragmentTransaction.replace(R.id.home_frame_container, new ProfileFragment(), "Profile Name");
+						fragmentTransaction.replace(R.id.home_frame_container, 
+								new ProfileFragment(), "Profile Name");
 						fragmentTransaction.commit();
-			        }
-			     })
-			    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-			        public void onClick(DialogInterface dialog, int which) { 
-			            // do nothing
-			        }
-			     })
-			    .setIcon(android.R.drawable.ic_dialog_alert)
-			     .show();
-						
+					}
+				})
+				.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) { 
+						// do nothing
+					}
+				})
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
+
 			}
 		});
 
@@ -114,14 +102,15 @@ public class ProfileNameFragment extends DialogFragment {
 			public void onClick(View v) {
 				FragmentManager fragmentManager = getFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.home_frame_container, new ProfileFragment(), "Profile Name");
+				fragmentTransaction.replace(R.id.home_frame_container, 
+						new ProfileFragment(), "Profile Name");
 				fragmentTransaction.commit();
 			}
 		});
 
 		return rootView;
 	}
-	
+
 	/**
 	 * UPDATE A USER WITH THE USERENDPOINT BUILDER
 	 * 
@@ -142,7 +131,7 @@ public class ProfileNameFragment extends DialogFragment {
 
 			User updatedUser = null;
 			try {
-			
+
 				updatedUser = EndpointController.getUserEndpoint().updateUser(this.updateUser)
 						.execute();
 
@@ -152,7 +141,7 @@ public class ProfileNameFragment extends DialogFragment {
 			return updatedUser;
 		}
 	}
-	
+
 	/**
 	 * RETRIEVE A USER WITH THE USERENDPOINT BUILDER
 	 * 

@@ -77,14 +77,12 @@ public class GoogleLocation {
 
 	public GoogleLocation(JSONObject jObject) {
 		try {
-			//address = jObject.getString("vicinity");
 			id = jObject.getString("id");
 			JSONObject geometry = jObject.getJSONObject("geometry");
 			JSONObject location = geometry.getJSONObject("location");
 			lat = location.getDouble("lat");
 			lng = location.getDouble("lng");
 			name = jObject.getString("name");
-			System.out.println("name: "+ name);
 		} catch (JSONException e) {
 			return;
 

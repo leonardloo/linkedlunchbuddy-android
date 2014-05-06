@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -19,7 +20,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,11 +36,12 @@ import com.linkedlunchbuddy.requestendpoint.model.Request;
 
 public class RequestSubmitFragment extends Fragment {
 
-	ProgressDialog progressDialog;
+	private ProgressDialog progressDialog;
 	private Request requestResponse;
 	private RequestActivity activity;
 	private View rootView;
-	private boolean isReadyToSubmit = false;
+	private boolean timeIsNotSetProperly = false;
+	private boolean restaurantsNotSet = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,20 +51,26 @@ public class RequestSubmitFragment extends Fragment {
 				false);
 		activity = (RequestActivity) getActivity();
 
+		// Updates data from all the previous fragments
 		updateData();
 
 		// Submit request button
-
 		Button submitButton = (Button) rootView
 				.findViewById(R.id.submitRequestButton);
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Check if time is set correctly
-				if (!isReadyToSubmit) {
-					Toast.makeText(activity.getApplicationContext(), "Please go back and set a start time before end time.", Toast.LENGTH_LONG).show();
+				if (timeIsNotSetProperly) {
+					Toast.makeText(activity.getApplicationContext(), 
+							"Please go back and set a start time before end time.", 
+							Toast.LENGTH_LONG).show();
+				} else if (restaurantsNotSet) {
+					Toast.makeText(activity.getApplicationContext(), 
+							"Please select some restaurants.", 
+							Toast.LENGTH_LONG).show();
 				} else {
-					// Launch AsyncTask
+					// Launch two async tasks
 					new createRequestTask(
 							((RequestActivity) RequestSubmitFragment.this
 									.getActivity()).getRequest()).execute();
@@ -73,32 +80,28 @@ public class RequestSubmitFragment extends Fragment {
 
 		});
 
-
 		return rootView;
 	}
-
-	/*
-	 * RequestTabFragment inherited methods
-	 */
 
 	public void updateData() {
 		if (activity != null) {
 			// Set Request unix time
-			long startUnixTime = unixTime(activity.getYear(), activity.getMonth(), activity.getDay(), activity.getStartHour(), activity.getStartMinute());
-			long endUnixTime = unixTime(activity.getYear(), activity.getMonth(), activity.getDay(), activity.getEndHour(), activity.getEndMinute());
+			long startUnixTime = unixTime(activity.getYear(), activity.getMonth(), 
+					activity.getDay(), activity.getStartHour(), 
+					activity.getStartMinute());
+			long endUnixTime = unixTime(activity.getYear(), activity.getMonth(), 
+					activity.getDay(), activity.getEndHour(), 
+					activity.getEndMinute());
 			if (startUnixTime > endUnixTime) {
-				isReadyToSubmit = false;
+				timeIsNotSetProperly = true;
 			} else {
-				isReadyToSubmit = true;
+				timeIsNotSetProperly = false;
 			}
 			Date startTimeDate = new Date(startUnixTime * 1000L);
 			Date endTimeDate = new Date(endUnixTime * 1000L);
-
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US);
 			String startTimeString = df.format(startTimeDate);
 			String endTimeString = df.format(endTimeDate);
-
-
 			TextView startDateText = (TextView) rootView.findViewById(R.id.startDateInfo);
 			TextView endDateText = (TextView) rootView.findViewById(R.id.endDateInfo);
 			startDateText.setText("Start Date: " + startTimeString);
@@ -106,6 +109,7 @@ public class RequestSubmitFragment extends Fragment {
 			Request request = activity.getRequest();
 			request.setStartTime(startUnixTime);
 			request.setEndTime(endUnixTime);
+			// Get name to set name in request
 			DataHandler dataHandler = new DataHandler(getActivity());
 			dataHandler.open();
 			Cursor cursor = dataHandler.allUsers();
@@ -113,10 +117,10 @@ public class RequestSubmitFragment extends Fragment {
 			request.setUserName(cursor.getString(2));
 			cursor.close();
 			dataHandler.close();
+			// Get restaurants to set restaurants and display them
 			List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
 			List<String> restaurantsInfo = new ArrayList<String>();
 			List<GoogleLocation> displayedRestaurants = new ArrayList<GoogleLocation>();
-
 			if (restaurants != null) {
 				for (GoogleLocation restaurant : restaurants) {
 					displayedRestaurants.add(restaurant);
@@ -131,16 +135,17 @@ public class RequestSubmitFragment extends Fragment {
 					restaurantsInfo.add(infoObject.toString());
 				}
 			}
+			if (restaurantsInfo.size() == 0) {
+				restaurantsNotSet = true;
+			} else {
+				restaurantsNotSet = false;
+			}
 			ListView restaurantsList = (ListView) rootView.findViewById(R.id.restaurantsListView);
 			GoogleLocationListAdapter adapter = new GoogleLocationListAdapter(
 					getActivity(), R.layout.google_location_list_item,
 					displayedRestaurants);
 			restaurantsList.setAdapter(adapter);
-			
 			request.setRestaurantPreferences(restaurantsInfo);
-
-			startDateText.invalidate();
-			endDateText.invalidate();
 
 		}
 	}
@@ -160,7 +165,6 @@ public class RequestSubmitFragment extends Fragment {
 
 		public createRequestTask(Request request) {
 			this.request = request;
-			System.out.println("request send off with time: "+ request.getStartTime()+"--"+request.getEndTime());
 		}
 
 		@Override
@@ -203,16 +207,14 @@ public class RequestSubmitFragment extends Fragment {
 
 		protected LunchDate doInBackground(Context... contexts) {
 			LunchDate lunchDate = null;
-			
+
 			if (requestResponse != null) {
 				requestId = Long.valueOf(requestResponse.getId());
-
-				System.out.println("requestId is " + requestId);
 				try {
 					// Get match for the request
 					lunchDate = EndpointController.getRequestController()
 							.findMatch(requestId).execute();
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -222,17 +224,15 @@ public class RequestSubmitFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute (LunchDate lunchDate) {
-//			deleteRequests(lunchDate);
 			progressDialog.dismiss();
 			String resultText = null;
 			LunchDateStatus statusToBeStored = new LunchDateStatus();
 			RequestActivity activity = (RequestActivity) RequestSubmitFragment.this.getActivity();
-			
+
 			List<Map<String, String>> restaurants = RequestSubmitFragment.this.
 					convertGoogleLocationList(activity.getSelectedRestaurants());
 			if (lunchDate == null) {
 				// Pending in core data
-				// Store current time
 				statusToBeStored = new LunchDateStatus(LunchDateStatus.STATUS_PENDING, 
 						"name", "email", restaurants, "100", "" + new Date().getTime());
 				resultText = "Sorry, we could not find a match at this time";
@@ -248,13 +248,8 @@ public class RequestSubmitFragment extends Fragment {
 				restaurant.put("name", restaurantName);
 				restaurants = new ArrayList<Map<String,String>>();
 				restaurants.add(restaurant);
-				
-				/*Date date = new Date(lunchDate.getMatchedInterval().getStartTime() * 1000);
-				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-				String time = df.format(date);
-				System.out.println(time);*/
-				String time = "" + lunchDate.getMatchedInterval().getStartTime() * 1000;
-				
+				String time = "" + lunchDate.getMatchedInterval().getStartTime() * 1000L;
+
 				statusToBeStored = new LunchDateStatus(LunchDateStatus.STATUS_MATCHED, 
 						lunchDate.getRequestB().getUserName(), lunchDate.getRequestB().getUserId(), restaurants, time, "" + new Date().getTime());				
 				resultText = "Congratulations! You have a match!";
@@ -266,26 +261,12 @@ public class RequestSubmitFragment extends Fragment {
 			dataHandler.updateLunchDateStatus(statusToBeStored.toJSON().toString());
 			dataHandler.close();
 
-			// Testing purposes
-			int duration = Toast.LENGTH_SHORT;
-			Context context = getActivity().getApplicationContext();
-			Toast toast = Toast.makeText(context, resultText, duration);
-			toast.show();
+			Toast.makeText(getActivity().getApplicationContext(), 
+					resultText, Toast.LENGTH_SHORT).show();
 
 			Intent intent = new Intent(RequestSubmitFragment.this.getActivity(), HomeActivity.class);
 			startActivity(intent);
 		}
-	}
-	
-	private static void deleteRequests(LunchDate lunchDate){
-		try {
-			EndpointController.getRequestEndpoint().removeRequest(lunchDate.getRequestA().getId());
-			EndpointController.getRequestEndpoint().removeRequest(lunchDate.getRequestB().getId());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 	/**

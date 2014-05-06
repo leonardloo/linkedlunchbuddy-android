@@ -1,8 +1,6 @@
 package com.linkedlunchbuddy;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -28,7 +26,7 @@ public class RequestRestaurantFragment extends Fragment{
 	private String cuisine;
 	private double lat;
 	private double lon;
-	boolean isFirstTime = true;
+	private boolean isFirstTime = true;
 	
 	public RequestRestaurantFragment() {
 
@@ -60,7 +58,6 @@ public class RequestRestaurantFragment extends Fragment{
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				// Call URL and update listview
 				cuisine  = parent.getItemAtPosition(position).toString();
 				if (cuisine.equals("All")) {
@@ -74,32 +71,19 @@ public class RequestRestaurantFragment extends Fragment{
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
 
 			}
 
 		});
 
-		// Only launch this when user is at this tab
-			//new SetupListTask(lat, lon, false).execute();
-
-
-
-
 		return rootView;
 
 	}
 
-
-
-	/*
-	 * RequestTabFragment inherited methods
-	 */
-
-	class SetupListTask extends
+	private class SetupListTask extends
 	AsyncTask<Void, Void, ArrayList<GoogleLocation>> {
 		private double latitude, longitude;
-		private ProgressDialog progressDialog;
+		private ProgressDialog progressDialog = new ProgressDialog(RequestRestaurantFragment.this.getActivity());
 		
 		public SetupListTask(double latitude, double longitude) {
 			this.latitude = latitude;
@@ -109,7 +93,6 @@ public class RequestRestaurantFragment extends Fragment{
 		@Override
 		protected void onPreExecute() {
 			if (!isFirstTime) {
-				progressDialog = new ProgressDialog(RequestRestaurantFragment.this.getActivity());
 				progressDialog.setMessage("Refreshing restaurants, please wait...");
 				progressDialog.show();
 				progressDialog.setCanceledOnTouchOutside(false);
@@ -142,6 +125,7 @@ public class RequestRestaurantFragment extends Fragment{
 					R.id.listNearbyPlaces);
 
 			listView.setAdapter(adapter);
+			
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 				@Override

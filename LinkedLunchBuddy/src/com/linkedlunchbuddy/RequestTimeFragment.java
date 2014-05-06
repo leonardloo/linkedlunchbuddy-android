@@ -1,9 +1,10 @@
 package com.linkedlunchbuddy;
 
-import java.text.SimpleDateFormat;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -20,7 +21,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class RequestTimeFragment extends Fragment {
 
@@ -59,7 +59,7 @@ public class RequestTimeFragment extends Fragment {
 		// If not set yet
 		if (year == -1 && startHour == -1 && endHour == -1) {
 			// Pre-fill in labels
-			DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 			Date date = new Date();
 			dateLabel.setText("Date: " + dfDate.format(date));
 			Calendar cal = Calendar.getInstance();
@@ -67,7 +67,7 @@ public class RequestTimeFragment extends Fragment {
 			activity.setYear(cal.get(Calendar.YEAR));
 			activity.setMonth(cal.get(Calendar.MONTH));
 			activity.setDay(cal.get(Calendar.DAY_OF_MONTH));
-			DateFormat dfTime = new SimpleDateFormat("HH:mm");
+			DateFormat dfTime = new SimpleDateFormat("HH:mm", Locale.US);
 			startTimeLabel.setText("Start Time: " + dfTime.format(date));
 			activity.setStartHour(cal.get(Calendar.HOUR_OF_DAY));
 			activity.setStartMinute(cal.get(Calendar.MINUTE));

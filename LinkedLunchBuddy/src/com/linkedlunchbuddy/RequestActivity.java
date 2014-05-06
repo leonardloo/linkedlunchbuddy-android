@@ -2,7 +2,6 @@ package com.linkedlunchbuddy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -107,7 +106,7 @@ public class RequestActivity extends FragmentActivity {
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
-						// Update data has to happen here
+						// Update data upon submit tab
 						if (position == 2) {
 							RequestSubmitFragment submitFragment = (RequestSubmitFragment) requestPagerAdapter
 									.getItem(position);
@@ -131,13 +130,11 @@ public class RequestActivity extends FragmentActivity {
 
 			@Override
 			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
 
 			}
 		};

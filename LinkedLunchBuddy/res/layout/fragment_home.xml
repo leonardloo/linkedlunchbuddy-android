@@ -14,12 +14,14 @@
         android:layout_marginTop="21dp"
         android:text="Screen Loading..." />
 
+
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/mapHome"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         class="com.google.android.gms.maps.MapFragment" />
+
 
 </RelativeLayout>
