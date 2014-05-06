@@ -1,20 +1,8 @@
 package com.linkedlunchbuddy;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 public class MatchingAlgorithm {
-
-	private static final String DEFAULT_RESTAURANT_ID = "restaurantId";
-
-
-
 	private static final long ONE_HOUR = 60 * 60;
 
 	static class MatchResult {
@@ -89,41 +77,6 @@ public class MatchingAlgorithm {
 		}
 	}
 
-	private static Map<String, String> overlapVenues(List<Map<String, String>> venues1, 
-			List<Map<String, String>> venues2) {
-
-		for (Map<String, String> venue1 : venues1) {
-			for (Map<String, String> venue2 : venues2) {
-				// Check if venue 1 is the same as venue 2
-				if (venue1.get("id").equals(venue2.get("id"))) {
-					return venue1;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	private static List<Map<String, String>> convertFromString(List<String> restaurants) {
-		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		for (String restaurant : restaurants) {
-			Map<String, String> map = new HashMap<String, String>();
-			// Convert String to JsonMap
-			try {
-				JSONObject restaurantJson = new JSONObject(restaurant);
-				map.put("id", restaurantJson.get("id").toString());
-				map.put("lat", restaurantJson.get("lat").toString());
-				map.put("lon", restaurantJson.get("lon").toString());
-				map.put("name", restaurantJson.get("name").toString());
-				list.add(map);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return list;
-	}
 	private static MatchResult evaluateTheMatch(Request request1,
 			Request request2) {
 

@@ -18,7 +18,6 @@ import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @Api(name = "requestcontroller", version = "v1", description = "our endpoint for matching requests")
 public class RequestController {
@@ -26,7 +25,6 @@ public class RequestController {
 	private static final String API_KEY = "AIzaSyBzZz7QzXWYVKSsn4TAeaFUXg4XE0RCJ_Y";
 
 	private static final DeviceInfoEndpoint deviceInfoEndpoint = new DeviceInfoEndpoint();
-	private static final MessageEndpoint messageEndpoint = new MessageEndpoint();
 
 	// given a request from a client application, determine a possible LunchDate
 	// matching this request with other requests in the request pool
@@ -84,9 +82,6 @@ public class RequestController {
 			}
 		}
 
-		// create a MessageData entity with a timestamp of when it was
-		// received, and persist it
-		// TODO: change to actual restaurant name
 		Message message = new Message.Builder()
 				.addData("partnerName", userA.getName())
 				.addData("partnerEmail", userA.getEduEmail())
@@ -96,24 +91,15 @@ public class RequestController {
 						String.valueOf(date.getMatchedInterval().getStartTime()))
 				.build();
 
-		// persist message if desired TODO: check if this is necessary
-		/*
-		 * MessageData messageObj = new MessageData();
-		 * messageObj.setMessage(message.toString());
-		 * messageObj.setTimestamp(System.currentTimeMillis()); try {
-		 * mgr.persist(messageObj); } finally { mgr.close(); }
-		 */
-
 		try {
 			Sender sender = new Sender(API_KEY);
-			// messageEndpoint.sendMessage(message.toString());
 			MessageEndpoint.doSendViaGcm(message.toString(), sender, userBInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// accessor method for persistence manager
+	// Accessor method for persistence manager
 	private static EntityManager getEntityManager() {
 		return EMF.get().createEntityManager();
 	}

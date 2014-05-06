@@ -1,15 +1,10 @@
 package com.linkedlunchbuddy;
 
 import javax.jdo.annotations.Extension;
-import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import com.google.appengine.api.datastore.Key;
 
 @Entity
 public class User {

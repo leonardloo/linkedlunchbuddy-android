@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/requestcontroller/v1/20140506031201/java/1.16.0-rc/linear_axle_547_appspot_com-requestcontroller-v1-20140506031201-java-1.16.0-rc-sources.jar", 
-      "path": "linear_axle_547_appspot_com-requestcontroller-v1-20140506031201-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/requestcontroller/v1/20140506220140/java/1.16.0-rc/linear_axle_547_appspot_com-requestcontroller-v1-20140506220140-java-1.16.0-rc-sources.jar", 
+      "path": "linear_axle_547_appspot_com-requestcontroller-v1-20140506220140-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-05-06 03:12"
+      "timestamp": "2014-05-06 22:01"
     }, 
     {
-      "path": "linear_axle_547_appspot_com-requestcontroller-v1-20140506031201-java-1.16.0-rc.jar.properties", 
+      "path": "linear_axle_547_appspot_com-requestcontroller-v1-20140506220140-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -701,5 +701,5 @@
   "version": "v1", 
   "language_version": "1.16.0-rc", 
   "id": "requestcontroller:v1", 
-  "revision": 20140506031201
+  "revision": 20140506220140
 }

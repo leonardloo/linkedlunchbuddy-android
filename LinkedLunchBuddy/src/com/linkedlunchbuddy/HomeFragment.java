@@ -247,10 +247,9 @@ public class HomeFragment extends Fragment {
 
 		android.location.Location location = locationManager
 				.getLastKnownLocation(provider);
-
-		LatLng selectedLocation = new LatLng(39.953229300000000000, -75.194119099999970000);
-//				new LatLng(location.getLatitude(),
-//								location.getLongitude());
+		// This can be set to static location to test on emulator
+		LatLng selectedLocation = new LatLng(location.getLatitude(), 
+				location.getLongitude());
 
 		// create marker
 		MarkerOptions marker;
