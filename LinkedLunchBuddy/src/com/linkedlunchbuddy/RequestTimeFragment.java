@@ -36,11 +36,7 @@ public class RequestTimeFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		// Load the theme
-		Context newContext = new ContextThemeWrapper(getActivity(),
-				R.style.RequestStyle);
-		LayoutInflater newInflater = (LayoutInflater) newContext
-				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-		View rootView = newInflater.inflate(R.layout.fragment_requesttime,
+		View rootView = inflater.inflate(R.layout.fragment_requesttime,
 				container, false);
 
 		activity = (RequestActivity) getActivity();

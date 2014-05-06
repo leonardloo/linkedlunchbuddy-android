@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment {
 				timeOfLunchDateString = df.format(dateOfLunchDate);
 				// The set restaurant will be the first index in the restaurant list
 				Map<String, String> restaurantAllocated = lunchDateStatus.getRestaurants().get(0);
-				statusText.setText("You've gotten a LunchDate!\n\n" +
+				statusText.setText(
 						"Your LunchDate is at " + timeOfLunchDateString + ".\n" +
 						"Your LunchBuddy is " + lunchDateStatus.getPartner() + ".\n" + 
 						"You may contact your LunchBuddy at " + lunchDateStatus.getPartnerEmail() + ".\n" + 
@@ -248,8 +248,9 @@ public class HomeFragment extends Fragment {
 		android.location.Location location = locationManager
 				.getLastKnownLocation(provider);
 
-		LatLng selectedLocation = new LatLng(location.getLatitude(),
-								location.getLongitude());
+		LatLng selectedLocation = new LatLng(39.953229300000000000, -75.194119099999970000);
+//				new LatLng(location.getLatitude(),
+//								location.getLongitude());
 
 		// create marker
 		MarkerOptions marker;

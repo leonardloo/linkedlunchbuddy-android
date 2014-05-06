@@ -146,7 +146,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		.setContentTitle("You have a LunchBuddy: " + name)
 		.setContentText("You have been matched with " + 
 				name + " at " + list.get(0)  + " at " + time)
-				.setSmallIcon(R.drawable.ic_femalemarker)
+				.setSmallIcon(R.drawable.ic_starmarker)
 				.setContentIntent(pIntent).build();
 		NotificationManager notificationManager = 
 				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
