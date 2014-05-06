@@ -219,6 +219,10 @@ public class RequestActivity extends FragmentActivity {
 		}
 		System.out.println(this.selectedRestaurants.size());
 	}
+	
+	public void clearAllRestaurants() {
+		this.selectedRestaurants.clear();
+	}
 
 	public int getYear() {
 		return year;

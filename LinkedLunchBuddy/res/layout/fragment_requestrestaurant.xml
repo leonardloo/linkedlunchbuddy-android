@@ -4,30 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="40dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
-        android:layout_marginTop="40dip"
+        android:layout_marginTop="140dip"
         android:orientation="vertical" >
 
         <ListView
             android:id="@+id/listNearbyPlaces"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="253dp" />
     </LinearLayout>
 
+    <!-- android:entries="@array/cuisine_array" -->
+
     <TextView
-        android:id="@+id/restaurantRequestHeader"
+        android:id="@+id/cuisineLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Nearby Restaurants" />
+        android:layout_marginTop="45dp"
+        android:textSize="20dp"
+        android:text="Choose your cuisine" />
+
+    <Spinner
+        android:id="@+id/cuisineSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="72dp"
+		/>
 
 </RelativeLayout>

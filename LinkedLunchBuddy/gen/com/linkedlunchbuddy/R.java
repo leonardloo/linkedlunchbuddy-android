@@ -9,6 +9,7 @@ package com.linkedlunchbuddy;
 
 public final class R {
     public static final class array {
+        public static final int cuisine_array=0x7f0a0002;
         /**  Nav Drawer List Item Icons 
  Keep them in order as the titles are in 
          */
@@ -458,7 +459,7 @@ containing a value of this type.
         public static final int list_selector=0x7f020050;
     }
     public static final class id {
-        public static final int action_settings=0x7f05004b;
+        public static final int action_settings=0x7f05004d;
         public static final int authButton=0x7f050010;
         public static final int blurbText=0x7f050009;
         public static final int blurbWelcome=0x7f050008;
@@ -484,14 +485,16 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f05002a;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f05002b;
         public static final int counter=0x7f05002f;
-        public static final int dateButton=0x7f050045;
-        public static final int dateLabel=0x7f050043;
+        public static final int cuisineLabel=0x7f05003f;
+        public static final int cuisineSpinner=0x7f050040;
+        public static final int dateButton=0x7f050047;
+        public static final int dateLabel=0x7f050045;
         public static final int drawer_layout=0x7f05000d;
         public static final int emailEnterButton=0x7f05000c;
         public static final int emailField=0x7f05000b;
-        public static final int endDateInfo=0x7f050040;
-        public static final int endTimeButton=0x7f050048;
-        public static final int endTimeLabel=0x7f050047;
+        public static final int endDateInfo=0x7f050042;
+        public static final int endTimeButton=0x7f05004a;
+        public static final int endTimeLabel=0x7f050049;
         public static final int firstNameField=0x7f050036;
         public static final int firstNameLabel=0x7f05003a;
         public static final int home_frame_container=0x7f05000e;
@@ -502,7 +505,8 @@ containing a value of this type.
         public static final int lastNameField=0x7f050037;
         public static final int lastNameLabel=0x7f050035;
         public static final int layercontainer=0x7f050031;
-        public static final int listNearbyPlaces=0x7f05003d;
+        public static final int linearLayout1=0x7f05003d;
+        public static final int listNearbyPlaces=0x7f05003e;
         public static final int list_slidermenu=0x7f05000f;
         public static final int lunchBuddy=0x7f050011;
         public static final int map=0x7f050012;
@@ -517,23 +521,22 @@ containing a value of this type.
         public static final int regButton=0x7f050016;
         public static final int requestPager=0x7f050017;
         public static final int responseLabel=0x7f05003b;
-        public static final int restaurantRequestHeader=0x7f05003e;
-        public static final int restaurantsListView=0x7f050041;
+        public static final int restaurantsListView=0x7f050043;
         public static final int satellite=0x7f050002;
         public static final int saveNameButton=0x7f050038;
         public static final int sendButton=0x7f05003c;
         public static final int small=0x7f050005;
-        public static final int startDateInfo=0x7f05003f;
+        public static final int startDateInfo=0x7f050041;
         public static final int startHomeButton=0x7f050007;
-        public static final int startTimeButton=0x7f050046;
-        public static final int startTimeLabel=0x7f050044;
-        public static final int start_request=0x7f05004a;
+        public static final int startTimeButton=0x7f050048;
+        public static final int startTimeLabel=0x7f050046;
+        public static final int start_request=0x7f05004c;
         public static final int statusText=0x7f050030;
-        public static final int submitRequestButton=0x7f050042;
+        public static final int submitRequestButton=0x7f050044;
         public static final int terrain=0x7f050003;
         public static final int textView1=0x7f05000a;
         public static final int title=0x7f05002e;
-        public static final int txtLocationName=0x7f050049;
+        public static final int txtLocationName=0x7f05004b;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;
@@ -698,6 +701,9 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
+        /**  Cuisine Spinner 
+         */
+        public static final int cuisine_prompt=0x7f06003b;
         /**  Content Description 
          */
         public static final int desc_list_item_icon=0x7f06003a;

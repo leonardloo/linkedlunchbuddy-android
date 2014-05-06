@@ -7,8 +7,11 @@
     <TextView 
         android:id="@+id/txtLocationName"
         android:textColor="@color/darkGreen"
+        android:textSize="15dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:minHeight="40dp"
         android:background="@drawable/button"/>
 
 </LinearLayout>
