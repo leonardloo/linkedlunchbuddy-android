@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -139,36 +141,40 @@ public class GCMIntentService extends GCMBaseIntentService {
 		DataHandler dataHandler = new DataHandler(getApplicationContext());
 		dataHandler.open();
 		String message = intent.getStringExtra("message");
-		System.out.println(message);
 		// Parse message
 		String name = message.split("partnerName=")[1].split(",")[0];
 		String email = message.split("partnerEmail=")[1].split(",")[0];
 		// Build time from long unix
-		String timeInLong = message.split("time=")[1].split(",")[0];
-		Date date = new Date(Long.parseLong(timeInLong));
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-		String time = df.format(date);
-		
+		String timeInLong = message.split("time=")[1].split(Pattern.quote("}"))[0];
+		// Store time in long
+		String time = "" + (Long.parseLong(timeInLong) * 1000);
+//		Date date = new Date(Long.parseLong(timeInLong) * 1000);
+//		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+//		String time = df.format(date);
+		String restaurantName = message.split("name\":\"")[1].split("\"")[0];
+		String restaurantLat = message.split("lat\":\"")[1].split("\"")[0];
+		String restaurantLon = message.split("lon\":\"")[1].split("\"")[0];
 		Map<String, String> restaurant = new HashMap<String, String>();
-		restaurant.put("lat", "39");
-		restaurant.put("lng","-75");
-		restaurant.put("name","yo");
+		restaurant.put("lat", restaurantLat);
+		restaurant.put("lng", restaurantLon);
+		restaurant.put("name", restaurantName);
 		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		list.add(restaurant);
 		dataHandler.updateLunchDateStatus(new LunchDateStatus(
-					LunchDateStatus.STATUS_MATCHED, name, email, list).
+					LunchDateStatus.STATUS_MATCHED, name, email, list, time, "").
 					toJSON().toString());
 		
 		dataHandler.close();
 		
-		 Intent homeIntent = new Intent(this, HomeActivity.class);
-		    PendingIntent pIntent = PendingIntent.getActivity(this, 0, homeIntent, 0);
+		 Intent homeIntent = new Intent(this, MainActivity.class);
+		 homeIntent.putExtra("fromPushNotification", true);
+		    PendingIntent pIntent = PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		    // Build notification
-		    // Actions are just fake
 		    Notification notification = new Notification.Builder(this)
 		        .setContentTitle("You have a LunchBuddy: " + name)
 		        .setContentText("You have been matched with " + name + " at " + list.get(0)  + " at " + time)
+		        .setSmallIcon(R.drawable.ic_femalemarker)
 		        .setContentIntent(pIntent).build();
 		    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		    // hide the notification after its selected
@@ -201,11 +207,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			
 			dataHandler.insertUser(fbid, email, fbfirstname,
 					fblastname, fbgender, (new LunchDateStatus(
-							LunchDateStatus.STATUS_DEFAULT, "name", "email", restaurants)).
+							LunchDateStatus.STATUS_DEFAULT, "name", "email", restaurants, "100", "100")).
 							toJSON().toString());
-			System.out.println(new LunchDateStatus(
-					LunchDateStatus.STATUS_DEFAULT, "name", "email", restaurants).
-					toJSON().toString());
 			dataHandler.close();
 			// Insert to backend
 			User createUser = new User().setEduEmail(email)

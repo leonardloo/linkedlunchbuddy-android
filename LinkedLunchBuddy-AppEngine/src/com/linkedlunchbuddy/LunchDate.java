@@ -21,7 +21,7 @@ public class LunchDate {
 
 	private Request requestB;
 
-	private Map<String, String> venue;
+	private String venue;
 
 	private boolean isConfirmed;
 
@@ -29,7 +29,7 @@ public class LunchDate {
 
 	private Date expiryTime;
 
-	public LunchDate(Request requestA, Request requestB, Map<String, String> venue,
+	public LunchDate(Request requestA, Request requestB, String venue,
 			TimeInterval matched) {
 		this.requestA = requestA;
 		this.requestB = requestB;
@@ -89,11 +89,11 @@ public class LunchDate {
 		this.requestB = requestB;
 	}
 
-	public Map<String, String> getVenue() {
+	public String getVenue() {
 		return this.venue;
 	}
 
-	public void setVenue(Map<String, String> venue) {
+	public void setVenue(String venue) {
 		this.venue = venue;
 	}
 

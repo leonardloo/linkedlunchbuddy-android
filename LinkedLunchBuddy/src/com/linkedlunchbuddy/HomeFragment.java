@@ -1,6 +1,9 @@
 package com.linkedlunchbuddy;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +35,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HomeFragment extends Fragment {
 
-	// TODO: After end time of LunchDate, status will revert back to STATUS_DEFAULT 
-	//- add an additional field, endtime unix string in LunchDateStatus
-	// TODO: After 30min of PENDING_REQUEST, push notification is sent and status will change to STATUS_REQUESTEXPIRED
-	// TODO: When push notification is sent any time before 30min, status will change to STATUS_MATCH
-
 	// Google Map
 	private GoogleMap googleMap;
 	private String gender = "";
@@ -62,14 +60,54 @@ public class HomeFragment extends Fragment {
 			JSONObject lunchDateObject = new JSONObject(cursor.getString(5));
 			LunchDateStatus lunchDateStatus = new LunchDateStatus(lunchDateObject);
 			String status = lunchDateStatus.getStatus();
+			Date date = new Date();
+			Long currentTime = date.getTime();
+			String timeOfLunchDateString = "";
 
+			// Do two checks
+			/*
+			if (status.equals(LunchDateStatus.STATUS_MATCHED)) {
+				if (lunchDateStatus.getTime() != null) {
+					Long timeOfLunchDate = Long.parseLong(lunchDateStatus.getTime());
+					Date dateOfLunchDate = new Date(timeOfLunchDate);
+					DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+					timeOfLunchDateString = df.format(dateOfLunchDate);
+					if (currentTime >= timeOfLunchDate) { // Lunch Date is over
+						// Reset to STATUS_DEFAULT
+						dataHandler.updateLunchDateStatus(new LunchDateStatus(
+								LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>(), "time", "submittedTime").
+								toJSON().toString());
+					}
+				}
+			}
+
+			// Match is not found 30minutes after submittedTime
+			if (status.equals(LunchDateStatus.STATUS_PENDING)) {
+				// Change to STATUS_REQUESTEXPIRED
+				Long submittedTime = Long.parseLong(lunchDateStatus.getSubmittedTime());
+				if (currentTime > (submittedTime + (1000 * 60 * 30))) {
+					dataHandler.updateLunchDateStatus(new LunchDateStatus(
+							LunchDateStatus.STATUS_REQUESTEXPIRED, "name", "email", new ArrayList<Map<String, String>>(), "time", "submittedTime").
+							toJSON().toString());
+				}
+			}
+
+			// Pull status again
+			lunchDateObject = new JSONObject(cursor.getString(5));
+			lunchDateStatus = new LunchDateStatus(lunchDateObject);
+			status = lunchDateStatus.getStatus();
+			*/
 			// Match is found!
 			if (status.equals(LunchDateStatus.STATUS_MATCHED)) {
+				Long timeOfLunchDate = Long.parseLong(lunchDateStatus.getTime());
+				Date dateOfLunchDate = new Date(timeOfLunchDate);
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+				timeOfLunchDateString = df.format(dateOfLunchDate);
 				// The set restaurant will be the first index in the restaurant list
 				Map<String, String> restaurantAllocated = lunchDateStatus.getRestaurants().get(0);
 				statusText.setText("You've gotten a LunchDate!\n\n" +
-						// TODO: To replace with lunch buddy's name after backend is modified
-						//"Your LunchBuddy is " + lunchDateStatus.getPartner() + ".\n" + 
+						"Your LunchDate is at " + timeOfLunchDateString + ".\n" +
+						"Your LunchBuddy is " + lunchDateStatus.getPartner() + ".\n" + 
 						"You may contact your LunchBuddy at " + lunchDateStatus.getPartnerEmail() + ".\n" + 
 						"Your restaurant is: " + restaurantAllocated.get("name") + ".");
 				LatLng restaurantLocation = new LatLng(Double.parseDouble(restaurantAllocated.get("lat")), 
@@ -176,8 +214,8 @@ public class HomeFragment extends Fragment {
 
 				// Set status back to default
 				dataHandler.updateLunchDateStatus(new LunchDateStatus(
-					LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>()).
-					toJSON().toString());
+						LunchDateStatus.STATUS_DEFAULT, "name", "email", new ArrayList<Map<String, String>>(), "100", "100").
+						toJSON().toString());
 
 			} 
 

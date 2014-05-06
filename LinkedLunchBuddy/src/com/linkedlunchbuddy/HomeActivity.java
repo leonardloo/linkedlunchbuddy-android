@@ -138,6 +138,14 @@ public class HomeActivity extends FragmentActivity {
 	
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if (intent.getBooleanExtra("fromPushNotification", false)) {
+			getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;

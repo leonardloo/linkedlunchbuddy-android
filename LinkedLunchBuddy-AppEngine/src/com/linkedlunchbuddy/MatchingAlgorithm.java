@@ -25,11 +25,11 @@ public class MatchingAlgorithm {
 		private double score;
 		private Request matchedRequest;
 		private TimeInterval dateTimeInterval;
-		private Map<String, String> matchedRestaurant;
+		private String matchedRestaurant;
 
 		public MatchResult(double score, double timeIntervalScore,
 				double distanceScore, Request request, TimeInterval interval, 
-				Map<String, String> matchedRestaurant) {
+				String matchedRestaurant) {
 			this.distanceScore = distanceScore;
 			this.timeIntervalScore = timeIntervalScore;
 			this.score = score;
@@ -116,7 +116,7 @@ public class MatchingAlgorithm {
 				JSONObject restaurantJson = new JSONObject(restaurant);
 				map.put("id", restaurantJson.get("id").toString());
 				map.put("lat", restaurantJson.get("lat").toString());
-				map.put("lng", restaurantJson.get("lng").toString());
+				map.put("lon", restaurantJson.get("lon").toString());
 				map.put("name", restaurantJson.get("name").toString());
 				list.add(map);
 			} catch (JSONException e) {
@@ -138,9 +138,17 @@ public class MatchingAlgorithm {
 		TimeInterval dateInterval;
 
 		// Restaurants overlap?
+		// TODO: Have to eventually convert
+		String overlappedRestaurant = null;
+		for (String restaurantMap : request1.getRestaurantPreferences()) {
+			if (request2.getRestaurantPreferences().contains(restaurantMap)) {
+				overlappedRestaurant = restaurantMap;
+			}
+		}
+		/*
 		Map<String, String> overlappedRestaurant = overlapVenues(
 				convertFromString(request1.getRestaurantPreferences()), convertFromString(request2.getRestaurantPreferences()));
-		
+		*/
 		if (overlappedRestaurant != null) {
 
 			if (intersection == null) {

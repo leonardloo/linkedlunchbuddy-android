@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/X6AqazqAd0WQ3WgBB8lVGN71e4M\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/aTLUPBKfYRi-qsTJD8kj9orry10\"",
  "discoveryVersion": "v1",
  "id": "lunchdateendpoint:v1",
  "name": "lunchdateendpoint",
@@ -86,10 +86,6 @@
     }
    }
   },
-  "JsonMap": {
-   "id": "JsonMap",
-   "type": "object"
-  },
   "LunchDate": {
    "id": "LunchDate",
    "type": "object",
@@ -115,7 +111,7 @@
      "$ref": "Request"
     },
     "venue": {
-     "$ref": "JsonMap"
+     "type": "string"
     }
    }
   },
@@ -153,6 +149,9 @@
      "type": "string"
     },
     "userId": {
+     "type": "string"
+    },
+    "userName": {
      "type": "string"
     }
    }

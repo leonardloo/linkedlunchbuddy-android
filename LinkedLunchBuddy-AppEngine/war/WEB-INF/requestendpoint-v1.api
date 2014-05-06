@@ -147,6 +147,9 @@
           "userId" : {
             "type" : "string"
           },
+          "userName" : {
+            "type" : "string"
+          },
           "restaurantPreferences" : {
             "type" : "array",
             "items" : {

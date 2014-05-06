@@ -21,20 +21,24 @@ public class LunchDateStatus {
 	private String partner;
 	private String partnerEmail;
 	private List<Map<String, String>> restaurants;
+	private String time;
+	private String submittedTime;
 
 	public LunchDateStatus() { };
 	
-	public LunchDateStatus(String status, String partner, String partnerEmail, List<Map<String, String>> restaurants) {
+	public LunchDateStatus(String status, String partner, String partnerEmail, List<Map<String, String>> restaurants, String time, String submittedTime) {
 		this.status = status;
 		this.partner = partner;
 		this.partnerEmail = partnerEmail;
 		this.restaurants = restaurants;
+		this.time = time;
+		this.submittedTime = submittedTime;
 	}
 	
 	public LunchDateStatus(JSONObject jsonObject) {
 		try {
 			status = jsonObject.getString("status");
-			partner = jsonObject.getString("partner");
+			partner = jsonObject.getString("partnerName");
 			partnerEmail = jsonObject.getString("partnerEmail");
 			JSONArray restaurantsArray = new JSONArray(jsonObject.getString("restaurants"));
 //			System.out.println(restaurantsString);
@@ -47,6 +51,8 @@ public class LunchDateStatus {
 				restaurantMap.put("name", restaurant.getString("name"));
 				restaurants.add(restaurantMap);
 			}
+			time = jsonObject.getString("time");
+			submittedTime = jsonObject.getString("submittedTime");
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -57,7 +63,7 @@ public class LunchDateStatus {
 		JSONObject result = new JSONObject();
 		try {
 			result.put("status", status);
-			result.put("partner", partner);
+			result.put("partnerName", partner);
 			result.put("partnerEmail", partnerEmail);
 			// Convert restaurants to JSONArray of JSONObjects
 			List<JSONObject> convertedRestaurants = new ArrayList<JSONObject>();
@@ -67,6 +73,8 @@ public class LunchDateStatus {
 			}
 			JSONArray restaurantsArray = new JSONArray(convertedRestaurants);
 			result.put("restaurants", restaurantsArray);
+			result.put("time", time);
+			result.put("submittedTime", submittedTime);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -98,6 +106,19 @@ public class LunchDateStatus {
 	public void setRestaurants(List<Map<String, String>> restaurants) {
 		this.restaurants = restaurants;
 	}
+	
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
 
+	public String getSubmittedTime() {
+		return submittedTime;
+	}
+	public void setSubmittedTime(String submittedTime) {
+		this.submittedTime = submittedTime;
+	}
 
 }

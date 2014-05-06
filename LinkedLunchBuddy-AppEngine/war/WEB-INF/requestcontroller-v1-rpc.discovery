@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/M23Uyt3pmcqGh9Q6mt89g1lJVmk\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/AoLRiSPdRgFjo-7_9YXRwquG0jU\"",
  "discoveryVersion": "v1",
  "id": "requestcontroller:v1",
  "name": "requestcontroller",
@@ -69,10 +69,6 @@
   }
  },
  "schemas": {
-  "JsonMap": {
-   "id": "JsonMap",
-   "type": "object"
-  },
   "LunchDate": {
    "id": "LunchDate",
    "type": "object",
@@ -98,7 +94,7 @@
      "$ref": "Request"
     },
     "venue": {
-     "$ref": "JsonMap"
+     "type": "string"
     }
    }
   },
@@ -136,6 +132,9 @@
      "type": "string"
     },
     "userId": {
+     "type": "string"
+    },
+    "userName": {
      "type": "string"
     }
    }

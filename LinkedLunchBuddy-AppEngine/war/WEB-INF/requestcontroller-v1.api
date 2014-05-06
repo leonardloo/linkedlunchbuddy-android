@@ -79,7 +79,7 @@
             "$ref" : "Request"
           },
           "venue" : {
-            "$ref" : "JsonMap"
+            "type" : "string"
           },
           "matchedInterval" : {
             "$ref" : "TimeInterval"
@@ -112,6 +112,9 @@
           "userId" : {
             "type" : "string"
           },
+          "userName" : {
+            "type" : "string"
+          },
           "restaurantPreferences" : {
             "type" : "array",
             "items" : {
@@ -128,10 +131,6 @@
             "type" : "string"
           }
         }
-      },
-      "JsonMap" : {
-        "id" : "JsonMap",
-        "type" : "object"
       },
       "TimeInterval" : {
         "id" : "TimeInterval",

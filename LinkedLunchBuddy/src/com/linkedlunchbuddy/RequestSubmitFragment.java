@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,6 @@ public class RequestSubmitFragment extends Fragment {
 
 	ProgressDialog progressDialog;
 	private Request requestResponse;
-	//	private LunchDate matchedLunchDate;
 	private RequestActivity activity;
 	private View rootView;
 	private boolean isReadyToSubmit = false;
@@ -106,7 +106,13 @@ public class RequestSubmitFragment extends Fragment {
 			Request request = activity.getRequest();
 			request.setStartTime(startUnixTime);
 			request.setEndTime(endUnixTime);
-
+			DataHandler dataHandler = new DataHandler(getActivity());
+			dataHandler.open();
+			Cursor cursor = dataHandler.allUsers();
+			cursor.moveToFirst();
+			request.setUserName(cursor.getString(2));
+			cursor.close();
+			dataHandler.close();
 			List<GoogleLocation> restaurants = activity.getSelectedRestaurants();
 			List<String> restaurantsInfo = new ArrayList<String>();
 			List<GoogleLocation> displayedRestaurants = new ArrayList<GoogleLocation>();
@@ -206,7 +212,7 @@ public class RequestSubmitFragment extends Fragment {
 					// Get match for the request
 					lunchDate = EndpointController.getRequestController()
 							.findMatch(requestId).execute();
-
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -216,22 +222,40 @@ public class RequestSubmitFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute (LunchDate lunchDate) {
+//			deleteRequests(lunchDate);
 			progressDialog.dismiss();
 			String resultText = null;
 			LunchDateStatus statusToBeStored = new LunchDateStatus();
 			RequestActivity activity = (RequestActivity) RequestSubmitFragment.this.getActivity();
+			
 			List<Map<String, String>> restaurants = RequestSubmitFragment.this.
 					convertGoogleLocationList(activity.getSelectedRestaurants());
 			if (lunchDate == null) {
 				// Pending in core data
+				// Store current time
 				statusToBeStored = new LunchDateStatus(LunchDateStatus.STATUS_PENDING, 
-						"", "", restaurants);
+						"name", "email", restaurants, "100", "" + new Date().getTime());
 				resultText = "Sorry, we could not find a match at this time";
 			} else {
 				// Match in core data
-				// TODO: Modify request on the backend to include user's name too
+				String mapString = lunchDate.getVenue();
+				String restaurantName = mapString.split("name\":\"")[1].split("\"")[0];
+				String restaurantLat = mapString.split("lat\":\"")[1].split("\"")[0];
+				String restaurantLon = mapString.split("lon\":\"")[1].split("\"")[0];
+				Map<String, String> restaurant = new HashMap<String, String>();
+				restaurant.put("lat", restaurantLat);
+				restaurant.put("lng", restaurantLon);
+				restaurant.put("name", restaurantName);
+				restaurants = new ArrayList<Map<String,String>>();
+				restaurants.add(restaurant);
+				
+				Date date = new Date(lunchDate.getMatchedInterval().getStartTime() * 1000);
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+				String time = df.format(date);
+				System.out.println(time);
+				
 				statusToBeStored = new LunchDateStatus(LunchDateStatus.STATUS_MATCHED, 
-						"name"/*lunchDate.getRequestB().getUser()*/, lunchDate.getRequestB().getUserId(), restaurants);				
+						lunchDate.getRequestB().getUserName(), lunchDate.getRequestB().getUserId(), restaurants, time, "" + new Date().getTime());				
 				resultText = "Congratulations! You have a match!";
 			}
 
@@ -247,11 +271,20 @@ public class RequestSubmitFragment extends Fragment {
 			Toast toast = Toast.makeText(context, resultText, duration);
 			toast.show();
 
-			// TODO: Move back to HomeActivity selectively after submitting
-			// Request
 			Intent intent = new Intent(RequestSubmitFragment.this.getActivity(), HomeActivity.class);
 			startActivity(intent);
 		}
+	}
+	
+	private static void deleteRequests(LunchDate lunchDate){
+		try {
+			EndpointController.getRequestEndpoint().removeRequest(lunchDate.getRequestA().getId());
+			EndpointController.getRequestEndpoint().removeRequest(lunchDate.getRequestB().getId());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**

@@ -18,8 +18,7 @@ public class Request {
 	private long startTime;
 	private long endTime;
 	private String userId;
-//	private List<String> restaurantPreferences;
-//	private List<Map<String, String>> restaurantPreferences;
+	private String userName;
 	private List<String> restaurantPreferences;
 	private double lat;
 	private double lon;
@@ -28,8 +27,8 @@ public class Request {
 	public Request() {
 	}
 
-	public Request(long startTime, long endTime, String userId, double lat,
-			double lon) {
+	public Request(long startTime, long endTime, String userId, String userName,
+			double lat, double lon) {
 		if (startTime >= endTime) {
 			throw new IllegalArgumentException();
 		}
@@ -37,8 +36,10 @@ public class Request {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.userId = userId;
+		this.userName = userName;
 		this.lat = lat;
 		this.lon = lon;
+		
 	}
 
 	// Getters & Setters
@@ -53,6 +54,14 @@ public class Request {
 
 	public void setUser(String userId) {
 		this.userId = userId;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public List<String> getRestaurantPreferences() {

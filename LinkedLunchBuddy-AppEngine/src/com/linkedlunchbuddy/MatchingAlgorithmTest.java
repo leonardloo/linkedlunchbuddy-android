@@ -18,11 +18,11 @@ public class MatchingAlgorithmTest {
 	User leonard;
 	User murphy;
 
-	Request vanPeltArmen = new Request(0, 3600000, "vaarmen@sas.upenn.edu", 39.952859, -75.193565);
-	Request drlBenedikt = new Request(hours(10), hours(20), "2", 39.952863, -75.189901);
-	Request huntsmanRachel = new Request(0, 7200000, "rmiao@sas.upenn.edu", 39.952472, -75.196679);
-	Request harrisonLeonard = new Request(hours(3), hours(4.5), "4", 39.952232, -75.201053);
-	Request yerevanMurphy = new Request(hours(0), hours(100), "5", 40.224549, 44.512024);
+	Request vanPeltArmen = new Request(0, 3600000, "vaarmen@sas.upenn.edu", "armen", 39.952859, -75.193565);
+	Request drlBenedikt = new Request(hours(10), hours(20), "2", "armen", 39.952863, -75.189901);
+	Request huntsmanRachel = new Request(0, 7200000, "rmiao@sas.upenn.edu", "armen", 39.952472, -75.196679);
+	Request harrisonLeonard = new Request(hours(3), hours(4.5), "4", "armen", 39.952232, -75.201053);
+	Request yerevanMurphy = new Request(hours(0), hours(100), "5", "armen", 40.224549, 44.512024);
 
 	Collection<Request> pool;
 

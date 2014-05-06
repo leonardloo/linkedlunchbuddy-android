@@ -75,10 +75,11 @@ public class RequestController {
 		User userA = mgr.find(User.class, date.getRequestA().getUserId());
 		DeviceInfo userBInfo = new DeviceInfo();
 
-		CollectionResponse<DeviceInfo> response = deviceInfoEndpoint.listDeviceInfo(null,
-				10);
+		CollectionResponse<DeviceInfo> response = deviceInfoEndpoint
+				.listDeviceInfo(null, 10);
 		for (DeviceInfo deviceInfo : response.getItems()) {
-			if (deviceInfo.getDeviceRegistrationID().equals(userB.getDeviceRegistrationId())) {
+			if (deviceInfo.getDeviceRegistrationID().equals(
+					userB.getDeviceRegistrationId())) {
 				userBInfo = deviceInfo;
 			}
 		}
@@ -87,13 +88,13 @@ public class RequestController {
 		// received, and persist it
 		// TODO: change to actual restaurant name
 		Message message = new Message.Builder()
-		.addData("partnerName", userA.getName())
-		.addData("partnerEmail", userA.getEduEmail())
-		.addData("restaurant", new JSONObject(date.getVenue()).toString())
-		.addData(
-				"time",
-				String.valueOf(date.getMatchedInterval().getStartTime())).build();
-
+				.addData("partnerName", userA.getName())
+				.addData("partnerEmail", userA.getEduEmail())
+				.addData("restaurant", date.getVenue())
+				.addData(
+						"time",
+						String.valueOf(date.getMatchedInterval().getStartTime()))
+				.build();
 
 		// persist message if desired TODO: check if this is necessary
 		/*
@@ -105,9 +106,8 @@ public class RequestController {
 
 		try {
 			Sender sender = new Sender(API_KEY);
-			//			messageEndpoint.sendMessage(message.toString());
-			MessageEndpoint.doSendViaGcm(message.toString(),
-					sender, userBInfo);
+			// messageEndpoint.sendMessage(message.toString());
+			MessageEndpoint.doSendViaGcm(message.toString(), sender, userBInfo);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

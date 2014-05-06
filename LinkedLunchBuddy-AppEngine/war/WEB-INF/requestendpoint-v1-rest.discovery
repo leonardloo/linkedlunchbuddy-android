@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/Z5rxMA7r5I1njRSClxsJv7H5FPg\"",
+ "etag": "\"ADiYQGKhdYR9rpbhIFHih-UBYRs/9WOi2BLBkuXJQUm9PT1_2cibf20\"",
  "discoveryVersion": "v1",
  "id": "requestendpoint:v1",
  "name": "requestendpoint",
@@ -122,6 +122,9 @@
      "type": "string"
     },
     "userId": {
+     "type": "string"
+    },
+    "userName": {
      "type": "string"
     }
    }
